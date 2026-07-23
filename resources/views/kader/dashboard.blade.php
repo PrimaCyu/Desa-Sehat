@@ -13,8 +13,9 @@
         width: 100% !important;
     }
     .calendar-day-cell {
-        width: 25px !important;
-        height: 25px !important;
+        width: 100% !important;
+        max-width: 32px !important;
+        aspect-ratio: 1 / 1 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -52,17 +53,22 @@
         </div>
 
         <!-- Next Schedule Quick Overview -->
-        <div class="bg-white/10 border border-white/20 p-5 rounded-2xl backdrop-blur-xs space-y-2.5">
-            <span class="text-[10px] uppercase font-bold tracking-wider text-emerald-200">Agenda Posyandu Terdekat</span>
+        <div @if($schedules->first()) onclick="openKaderScheduleModal({{ $schedules->first()->id }})" @endif class="bg-white/10 border border-white/20 p-5 rounded-2xl backdrop-blur-xs space-y-2.5 hover:bg-white/15 transition cursor-pointer group">
+            <div class="flex items-center justify-between">
+                <span class="text-[10px] uppercase font-bold tracking-wider text-emerald-200">Agenda Posyandu Terdekat</span>
+                @if($schedules->first())
+                    <span class="text-[9px] font-bold bg-white/20 text-white px-2 py-0.5 rounded-md backdrop-blur-xs group-hover:bg-emerald-400 group-hover:text-emerald-950 transition">Detail</span>
+                @endif
+            </div>
             @if($schedules->first())
-                <h4 class="font-extrabold text-sm truncate">{{ $schedules->first()->judul }}</h4>
+                <h4 class="font-extrabold text-sm leading-snug text-white group-hover:text-emerald-100 transition">{{ $schedules->first()->judul }}</h4>
                 <div class="flex items-center gap-2 text-xs text-emerald-100">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     <span>{{ $schedules->first()->tanggal_kegiatan->format('d M Y') }} &bull; {{ substr($schedules->first()->jam_mulai, 0, 5) }} WIB</span>
                 </div>
                 <div class="flex items-center gap-2 text-xs text-emerald-100">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    <span class="truncate">{{ $schedules->first()->tempat }}</span>
+                    <svg class="w-4 h-4 shrink-0 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span class="line-clamp-1">{{ $schedules->first()->tempat }}</span>
                 </div>
             @else
                 <p class="text-xs text-emerald-100">Belum ada agenda terdekat.</p>
@@ -410,10 +416,10 @@
 
     </div>
 
-    <!-- Right Column: Graphs, Schedules & Mini Calendar (1/3 width) -->
+    
     <div class="space-y-6">
 
-        <!-- Widget Permintaan Verifikasi Anggota Keluarga Baru -->
+        
         <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
             <h3 class="text-base font-extrabold text-slate-800 mb-4 flex items-center justify-between">
                 <span class="flex items-center gap-2">
@@ -536,18 +542,27 @@
 
             <!-- Schedules Details List -->
             <div class="space-y-4">
-                <h4 class="font-extrabold text-slate-800 text-xs">Detail Agenda Terdekat</h4>
+                <h4 class="font-extrabold text-slate-800 text-xs flex items-center justify-between">
+                    <span>Detail Agenda Terdekat</span>
+                    <a href="{{ route('kader.schedules.index') }}" class="text-[10px] font-bold text-emerald-600 hover:underline">Kelola &rarr;</a>
+                </h4>
                 <div class="space-y-3">
                     @forelse($schedules as $sch)
-                        <div class="flex gap-3 bg-slate-50/50 p-3.5 rounded-2xl border border-slate-100">
-                            <div class="bg-emerald-50 text-emerald-600 font-black w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0 border border-emerald-100">
-                                <span class="text-xs leading-none">{{ $sch->tanggal_kegiatan->format('d') }}</span>
-                                <span class="text-[8px] uppercase tracking-wider font-extrabold mt-0.5 leading-none">{{ $sch->tanggal_kegiatan->format('M') }}</span>
+                        <div onclick="openKaderScheduleModal({{ $sch->id }})" class="flex items-start bg-slate-50/70 hover:bg-emerald-50/40 p-3 rounded-2xl border border-slate-150 hover:border-emerald-300 transition duration-200 cursor-pointer group">
+                            <div class="bg-emerald-500 text-white font-black rounded-xl flex flex-col items-center justify-center shrink-0 shadow-2xs" style="min-width: 44px; width: 44px; height: 44px; flex-shrink: 0; margin-right: 16px;">
+                                <span class="text-xs font-black leading-none" style="line-height: 1;">{{ $sch->tanggal_kegiatan->format('d') }}</span>
+                                <span class="text-[8px] uppercase tracking-wider font-extrabold mt-1 leading-none" style="line-height: 1;">{{ $sch->tanggal_kegiatan->format('M') }}</span>
                             </div>
-                            <div class="min-w-0">
-                                <h5 class="font-extrabold text-slate-700 text-xs truncate">{{ $sch->judul }}</h5>
-                                <p class="text-[10px] text-slate-400 truncate mt-0.5">{{ $sch->tempat }}</p>
-                                <p class="text-[10px] text-emerald-600 mt-1 font-extrabold">{{ substr($sch->jam_mulai, 0, 5) }} - {{ substr($sch->jam_selesai, 0, 5) }} WIB</p>
+                            <div class="min-w-0 flex-1 space-y-0.5">
+                                <h5 class="font-extrabold text-slate-800 text-xs leading-snug group-hover:text-emerald-700 transition">{{ $sch->judul }}</h5>
+                                <p class="text-[10px] text-slate-500 flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    <span class="line-clamp-1">{{ $sch->tempat }}</span>
+                                </p>
+                                <p class="text-[10px] text-emerald-650 font-bold flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>{{ substr($sch->jam_mulai, 0, 5) }} - {{ substr($sch->jam_selesai, 0, 5) }} WIB</span>
+                                </p>
                             </div>
                         </div>
                     @empty
@@ -612,19 +627,22 @@
             <a href="{{ route('kader.announcements.index') }}" class="text-xs font-semibold text-emerald-600 hover:underline">Kelola</a>
         </div>
         
-        <div class="space-y-4">
+        <div class="space-y-3.5">
             @php
-                $announcements = App\Models\Pengumuman::orderBy('tanggal_terbit', 'desc')->take(3)->get();
+                $announcements = App\Models\Pengumuman::orderBy('tanggal_terbit', 'desc')->take(4)->get();
             @endphp
             @forelse($announcements as $ann)
-                <div class="border-b border-slate-100 last:border-0 pb-3.5 last:pb-0">
-                    <span class="text-[9px] font-bold text-slate-450 block mb-0.5">
-                        {{ $ann->tanggal_terbit ? $ann->tanggal_terbit->format('d M Y') : $ann->created_at->format('d M Y') }}
-                    </span>
-                    <h4 class="font-extrabold text-slate-700 text-xs">
+                <div onclick="openKaderAnnouncementModal({{ $ann->id }})" class="p-3 bg-slate-50/70 hover:bg-emerald-50/40 rounded-2xl border border-slate-150 hover:border-emerald-300 transition duration-200 cursor-pointer group text-xs">
+                    <div class="flex items-center justify-between gap-2 mb-1">
+                        <span class="text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                            {{ $ann->tanggal_terbit ? $ann->tanggal_terbit->format('d M Y') : $ann->created_at->format('d M Y') }}
+                        </span>
+                        <span class="text-[9.5px] font-bold text-slate-400 group-hover:text-emerald-600">Detail &rarr;</span>
+                    </div>
+                    <h4 class="font-extrabold text-slate-800 leading-snug group-hover:text-emerald-700 transition">
                         {{ $ann->judul }}
                     </h4>
-                    <p class="text-[10px] text-slate-500 mt-1 leading-relaxed line-clamp-2">
+                    <p class="text-[10.5px] text-slate-500 mt-1 leading-relaxed line-clamp-2">
                         {{ $ann->konten }}
                     </p>
                 </div>
@@ -634,7 +652,116 @@
         </div>
     </div>
 
+<!-- Kader Schedule Details Modal Layer -->
+<div id="kaderScheduleModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 p-6 animate-scaleUp space-y-4">
+        <!-- Top Bar -->
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                Detail Agenda Posyandu
+            </span>
+            <button onclick="closeKaderScheduleModal()" class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-1.5 rounded-full transition cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <div>
+            <h3 class="text-base sm:text-lg font-black text-slate-900 leading-snug" id="kader-modal-schedule-title">Judul Agenda</h3>
+        </div>
+
+        <div class="bg-slate-50 p-4 rounded-2xl space-y-3 border border-slate-100/80 text-xs">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-white text-emerald-600 rounded-xl shadow-2xs shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Tanggal Kegiatan</span>
+                    <span class="font-extrabold text-slate-800 block" id="kader-modal-schedule-date">-</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 border-t border-slate-200/60 pt-2.5">
+                <div class="p-2 bg-white text-emerald-600 rounded-xl shadow-2xs shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div>
+                    <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Waktu Pelaksanaan</span>
+                    <span class="font-extrabold text-slate-800 block" id="kader-modal-schedule-time">-</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 border-t border-slate-200/60 pt-2.5">
+                <div class="p-2 bg-white text-emerald-600 rounded-xl shadow-2xs shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </div>
+                <div>
+                    <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Lokasi Pelayanan</span>
+                    <span class="font-extrabold text-slate-800 block" id="kader-modal-schedule-location">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-1.5">
+            <span class="text-[10px] uppercase font-extrabold text-slate-400 tracking-wider block">Deskripsi & Catatan Petugas</span>
+            <div class="bg-emerald-50/40 border-l-3 border-emerald-500 p-3.5 rounded-r-2xl text-xs text-slate-700 leading-relaxed whitespace-pre-line max-h-40 overflow-y-auto" id="kader-modal-schedule-description">
+                -
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+            <a href="{{ route('kader.schedules.index') }}" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold transition text-center shadow-xs">
+                Kelola Jadwal Ini
+            </a>
+            <button onclick="closeKaderScheduleModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition cursor-pointer">
+                Tutup
+            </button>
+        </div>
+    </div>
 </div>
+
+<!-- Kader Announcement Details Modal Layer -->
+<div id="kaderAnnouncementModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 p-6 animate-scaleUp space-y-4">
+        <!-- Top Bar -->
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-100">
+                Pengumuman Posyandu
+            </span>
+            <button onclick="closeKaderAnnouncementModal()" class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-1.5 rounded-full transition cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <div>
+            <h3 class="text-base sm:text-lg font-black text-slate-900 leading-snug" id="kader-modal-announcement-title">Judul Pengumuman</h3>
+        </div>
+
+        <div class="flex items-center justify-between gap-2 text-xs text-slate-500 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-100/80">
+            <span class="font-medium flex items-center gap-1" id="kader-modal-announcement-date">
+                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Diterbitkan: -
+            </span>
+            <span class="font-bold text-emerald-700 flex items-center gap-1" id="kader-modal-announcement-author">
+                Oleh: Kader
+            </span>
+        </div>
+
+        <div class="space-y-1.5">
+            <span class="text-[10px] uppercase font-extrabold text-slate-400 tracking-wider block">Isi Pengumuman Lengkap</span>
+            <div class="bg-slate-50 border border-slate-100/80 p-3.5 rounded-2xl text-xs text-slate-700 leading-relaxed whitespace-pre-line max-h-52 overflow-y-auto" id="kader-modal-announcement-content">
+                -
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+            <a href="{{ route('kader.announcements.index') }}" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold transition text-center shadow-xs">
+                Kelola Pengumuman
+            </a>
+            <button onclick="closeKaderAnnouncementModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition cursor-pointer">
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -651,7 +778,10 @@
         if (hour >= 5 && hour < 11) greeting = "Selamat Pagi";
         else if (hour >= 11 && hour < 15) greeting = "Selamat Siang";
         else if (hour >= 15 && hour < 18) greeting = "Selamat Sore";
-        greetingsEl.innerText = `${greeting}, ${ {!! json_encode(auth()->user()->name) !!} }!`;
+
+        if (greetingsEl) {
+            greetingsEl.innerText = greeting + ", " + {!! json_encode(auth()->user()->name) !!} + "!";
+        }
 
         // Format date and time
         const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -663,7 +793,9 @@
         const year = now.getFullYear();
         const time = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
         
-        clockEl.innerText = `${dayName}, ${day} ${monthName} ${year} - ${time}`;
+        if (clockEl) {
+            clockEl.innerText = `${dayName}, ${day} ${monthName} ${year} - ${time}`;
+        }
     }
     setInterval(updateGreetingsClock, 1000);
     updateGreetingsClock();
@@ -740,8 +872,10 @@
         }
     }
 
-    // 4. Live Queue Polling Logic
+    // 4. Live Queue Polling Logic (with tab-inactive optimization)
     function pollKaderQueues() {
+        if (document.hidden) return; // Skip fetch if tab is hidden / in background
+
         fetch('{{ route("kader.queue.poll-data") }}')
             .then(res => res.json())
             .then(data => {
@@ -863,48 +997,118 @@
     }
     setInterval(pollKaderQueues, 3000);
 
+    // Immediately fetch fresh queue data when Kader switches back to this tab
+    document.addEventListener("visibilitychange", function() {
+        if (!document.hidden) {
+            pollKaderQueues();
+        }
+    });
+
     // 5. Chart.js Monthly Visitation Trend Chart Setup
     document.addEventListener("DOMContentLoaded", function () {
-        const trendCtx = document.getElementById('visitationTrendChart').getContext('2d');
-        new Chart(trendCtx, {
-            type: 'line',
-            data: {
-                labels: {!! json_encode($monthlyLabels) !!},
-                datasets: [{
-                    label: 'Jumlah Kunjungan / Rekap Medis',
-                    data: {!! json_encode($monthlyVisits) !!},
-                    borderColor: '#0d9488', // teal-600
-                    backgroundColor: 'rgba(13, 148, 136, 0.08)',
-                    borderWidth: 3.5,
-                    fill: true,
-                    tension: 0.35,
-                    pointBackgroundColor: '#0d9488',
-                    pointHoverRadius: 7,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        padding: 10,
-                        cornerRadius: 12,
-                        titleFont: { family: 'Plus Jakarta Sans', weight: 'bold' },
-                        bodyFont: { family: 'Plus Jakarta Sans' }
-                    }
+        const trendCanvas = document.getElementById('visitationTrendChart');
+        if (trendCanvas) {
+            const trendCtx = trendCanvas.getContext('2d');
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: {!! json_encode($monthlyLabels) !!},
+                    datasets: [{
+                        label: 'Jumlah Kunjungan / Rekap Medis',
+                        data: {!! json_encode($monthlyVisits) !!},
+                        borderColor: '#0d9488', // teal-600
+                        backgroundColor: 'rgba(13, 148, 136, 0.08)',
+                        borderWidth: 3.5,
+                        fill: true,
+                        tension: 0.35,
+                        pointBackgroundColor: '#0d9488',
+                        pointHoverRadius: 7,
+                    }]
                 },
-                scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { family: 'Plus Jakarta Sans', size: 9, weight: 'bold' } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            padding: 10,
+                            cornerRadius: 12,
+                            titleFont: { family: 'Plus Jakarta Sans', weight: 'bold' },
+                            bodyFont: { family: 'Plus Jakarta Sans' }
+                        }
                     },
-                    y: {
-                        ticks: { stepSize: 1, font: { family: 'Plus Jakarta Sans', size: 9 } }
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Plus Jakarta Sans', size: 9, weight: 'bold' } }
+                        },
+                        y: {
+                            ticks: { stepSize: 1, font: { family: 'Plus Jakarta Sans', size: 9 } }
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
+    });
+
+    // 6. Schedule & Announcement Detail Modals for Kader
+    const kaderSchedulesList = {!! json_encode($schedules) !!};
+    const kaderAnnouncementsList = {!! json_encode($announcements) !!};
+
+    const kaderScheduleModal = document.getElementById('kaderScheduleModal');
+    function openKaderScheduleModal(schId) {
+        const sch = kaderSchedulesList.find(s => s.id === schId);
+        if (!sch) return;
+
+        document.getElementById('kader-modal-schedule-title').innerText = sch.judul;
+        
+        let formattedDate = sch.tanggal_kegiatan;
+        try {
+            const d = new Date(sch.tanggal_kegiatan);
+            formattedDate = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        } catch(e) {}
+        
+        document.getElementById('kader-modal-schedule-date').innerText = formattedDate;
+        
+        const startTime = sch.jam_mulai ? sch.jam_mulai.substring(0, 5) : '08:00';
+        const endTime = sch.jam_selesai ? sch.jam_selesai.substring(0, 5) : '12:00';
+        document.getElementById('kader-modal-schedule-time').innerText = startTime + ' - ' + endTime + ' WIB';
+        
+        document.getElementById('kader-modal-schedule-location').innerText = sch.tempat;
+        document.getElementById('kader-modal-schedule-description').innerText = sch.deskripsi ? sch.deskripsi : 'Tidak ada catatan tambahan untuk kegiatan ini.';
+
+        if (kaderScheduleModal) kaderScheduleModal.classList.remove('hidden');
+    }
+    function closeKaderScheduleModal() {
+        if (kaderScheduleModal) kaderScheduleModal.classList.add('hidden');
+    }
+
+    const kaderAnnouncementModal = document.getElementById('kaderAnnouncementModal');
+    function openKaderAnnouncementModal(annId) {
+        const ann = kaderAnnouncementsList.find(a => a.id === annId);
+        if (!ann) return;
+
+        document.getElementById('kader-modal-announcement-title').innerText = ann.judul;
+        
+        let pubDate = ann.tanggal_terbit || ann.created_at;
+        try {
+            const d = new Date(pubDate);
+            pubDate = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        } catch(e) {}
+        
+        document.getElementById('kader-modal-announcement-date').innerText = 'Diterbitkan: ' + pubDate;
+        document.getElementById('kader-modal-announcement-author').innerText = ann.pembuat ? 'Oleh: ' + ann.pembuat.name : 'Oleh: Kader Posyandu';
+        document.getElementById('kader-modal-announcement-content').innerText = ann.konten;
+
+        if (kaderAnnouncementModal) kaderAnnouncementModal.classList.remove('hidden');
+    }
+    function closeKaderAnnouncementModal() {
+        if (kaderAnnouncementModal) kaderAnnouncementModal.classList.add('hidden');
+    }
+
+    window.addEventListener('click', function (e) {
+        if (e.target === kaderScheduleModal) closeKaderScheduleModal();
+        if (e.target === kaderAnnouncementModal) closeKaderAnnouncementModal();
     });
 </script>
 @endsection

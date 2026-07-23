@@ -60,7 +60,7 @@
 
     <!-- Send Notification Panel -->
     <div>
-        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs sticky top-22">
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs sticky top-20">
             <div class="flex items-center gap-2.5 mb-6">
                 <div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Antrean;
 use App\Models\Jadwal;
 use App\Models\Pengumuman;
@@ -54,7 +55,7 @@ class WargaController extends Controller
             ->take(10)
             ->get();
 
-        $readNotificationIds = \DB::table('notifikasi_dibaca')
+        $readNotificationIds = DB::table('notifikasi_dibaca')
             ->where('pengguna_id', $user->id)
             ->pluck('notifikasi_id')
             ->toArray();
@@ -107,36 +108,43 @@ class WargaController extends Controller
     }
 
     /**
-     * Request queue number.
+     * Request queue number safely with DB transaction to prevent race conditions.
      */
     public function takeQueue()
     {
         $user = Auth::user();
 
-        // Check if already has queue today
-        $existingQueue = Antrean::where('pengguna_id', $user->id)
-            ->whereDate('tanggal_antrean', Carbon::today())
-            ->first();
+        return DB::transaction(function () use ($user) {
+            // Check if already has queue today with pessimistic lock
+            $existingQueue = Antrean::where('pengguna_id', $user->id)
+                ->whereDate('tanggal_antrean', Carbon::today())
+                ->lockForUpdate()
+                ->first();
 
-        if ($existingQueue) {
-            return back()->with('error', 'Keluarga Anda sudah mengambil nomor antrean hari ini.');
-        }
+            if ($existingQueue) {
+                return back()->with('error', 'Keluarga Anda sudah mengambil nomor antrean hari ini.');
+            }
 
-        // Get next number
-        $nextNumber = Antrean::whereDate('tanggal_antrean', Carbon::today())->max('nomor_antrean') + 1;
-        $queueCode = 'A-' . $nextNumber;
+            // Get next number with pessimistic lock
+            $maxNumber = Antrean::whereDate('tanggal_antrean', Carbon::today())
+                ->lockForUpdate()
+                ->max('nomor_antrean');
 
-        $queue = Antrean::create([
-            'pengguna_id' => $user->id,
-            'tanggal_antrean' => Carbon::today(),
-            'nomor_antrean' => $nextNumber,
-            'kode_antrean' => $queueCode,
-            'status' => 'menunggu',
-        ]);
+            $nextNumber = ($maxNumber ?? 0) + 1;
+            $queueCode = 'A-' . $nextNumber;
 
-        LogAudit::log('ambil_antrean', "Keluarga Bapak '{$user->kepala_keluarga}' mengambil nomor antrean: {$queueCode}", $user->id);
+            $queue = Antrean::create([
+                'pengguna_id' => $user->id,
+                'tanggal_antrean' => Carbon::today(),
+                'nomor_antrean' => $nextNumber,
+                'kode_antrean' => $queueCode,
+                'status' => 'menunggu',
+            ]);
 
-        return back()->with('success', "Nomor antrean {$queueCode} berhasil diambil!");
+            LogAudit::log('ambil_antrean', "Keluarga Bapak '{$user->kepala_keluarga}' mengambil nomor antrean: {$queueCode}", $user->id);
+
+            return back()->with('success', "Nomor antrean {$queueCode} berhasil diambil!");
+        });
     }
 
     /**

@@ -53,7 +53,7 @@
     @endauth
 
     <!-- Top Navigation Bar -->
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-xs">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo & Brand -->
@@ -67,20 +67,17 @@
                         </button>
                     @endauth
 
-                    <div class="bg-gradient-to-tr from-emerald-400 to-teal-500 text-white p-2 rounded-xl shadow-md shadow-emerald-200 animate-pulse">
-                        <!-- Health Symbol SVG -->
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-700 text-glow">
-                            DesaSehat
-                        </h1>
-                        <span class="text-[10px] uppercase font-semibold tracking-wider text-slate-400 block -mt-1">
-                            Posyandu Digital
-                        </span>
-                    </div>
+                    <a href="{{ url('/') }}" class="flex items-center gap-3 group py-1.5">
+                        <img src="{{ asset('images/logo-icon.png') }}" alt="DesaSehat Logo" class="h-12 sm:h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105 filter drop-shadow-xs">
+                        <div class="flex flex-col justify-center">
+                            <h1 class="text-xl sm:text-2xl font-black tracking-tight text-slate-800 leading-none group-hover:text-emerald-600 transition">
+                                Desa<span class="text-emerald-600">Sehat</span>
+                            </h1>
+                            <span class="text-xs font-semibold text-slate-400 tracking-wider mt-0.5">
+                                Posyandu Digital
+                            </span>
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Right Menu: User Info & Logout -->
@@ -127,7 +124,7 @@
                     </button>
                 </div>
                 
-                <div class="sticky top-22 bg-white md:rounded-2xl md:border md:border-slate-100 md:shadow-sm md:p-4 flex flex-col gap-1">
+                <div class="sticky top-20 bg-white md:rounded-2xl md:border md:border-slate-100 md:shadow-sm md:p-4 flex flex-col gap-1">
                     <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2 block">Menu Layanan</span>
 
                     @if(auth()->user()->isKader())
@@ -299,5 +296,7 @@
         });
     </script>
     @endauth
+
+    @yield('scripts')
 </body>
 </html>

@@ -232,19 +232,18 @@
     <div class="lg:col-span-2 space-y-6">
         
         <!-- Family Members Grid -->
-        <div id="members-section" class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                 <div>
                     <h3 class="text-base font-extrabold text-slate-800">Anggota Keluarga Terdaftar</h3>
-                    <p class="text-[10px] text-slate-400 mt-0.5">Pilih salah satu kartu untuk riwayat kesehatan detail</p>
+                    <p class="text-[10px] sm:text-xs text-slate-400 mt-0.5">Pilih salah satu kartu untuk riwayat kesehatan detail</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                <div class="flex items-center gap-2 shrink-0">
+                    <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100/80 whitespace-nowrap shrink-0">
                         {{ $members->count() }} Orang
                     </span>
-                    <button onclick="openAddMemberModal()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1 cursor-pointer">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v3m0 0v3m0-3h3m-3 0h-3m-9-4h18"></path></svg>
-                        Tambah Anggota
+                    <button onclick="openAddMemberModal()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+                        <span>Tambah Anggota</span>
                     </button>
                 </div>
             </div>
@@ -408,47 +407,87 @@
         </div>
 
         <!-- Schedules List -->
-        <div id="schedules-section" class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
-            <h3 class="text-base font-extrabold text-slate-800 mb-4 flex items-center gap-2">
-                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                Agenda Posyandu Terdekat
-            </h3>
+        <div id="schedules-section" class="bg-white border border-slate-100 rounded-3xl p-5 sm:p-6 shadow-xs">
+            <div class="flex items-center justify-between gap-2 mb-4 border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="text-sm sm:text-base font-extrabold text-slate-800">Agenda Posyandu</h3>
+                </div>
+                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 shrink-0">
+                    {{ $schedules->count() }} Agenda
+                </span>
+            </div>
             
-            <div class="space-y-4">
+            <div class="space-y-3">
                 @forelse($schedules as $sch)
-                    <div class="flex gap-3 bg-slate-50/50 p-3 rounded-xl border border-slate-100">
-                        <div class="bg-emerald-50 text-emerald-600 font-extrabold w-12 h-12 rounded-lg flex flex-col items-center justify-center shrink-0 border border-emerald-100">
-                            <span class="text-xs leading-none">{{ $sch->tanggal_kegiatan->format('d') }}</span>
-                            <span class="text-[9px] uppercase tracking-wider leading-none mt-0.5">{{ $sch->tanggal_kegiatan->format('M') }}</span>
+                    <div onclick="openScheduleModal({{ $sch->id }})" class="p-3.5 bg-slate-50/70 hover:bg-emerald-50/40 rounded-2xl border border-slate-100 hover:border-emerald-200 transition duration-200 cursor-pointer group flex items-start gap-3.5">
+                        <!-- Date Badge (Left) with explicit 20px margin-right -->
+                        <div class="bg-emerald-500 text-white font-black rounded-2xl flex flex-col items-center justify-center shrink-0 shadow-2xs" style="min-width: 52px; width: 52px; height: 52px; flex-shrink: 0; margin-right: 20px;">
+                            <span class="text-sm font-black leading-none" style="line-height: 1;">{{ $sch->tanggal_kegiatan->format('d') }}</span>
+                            <span class="text-[9px] uppercase tracking-wider leading-none mt-1 font-extrabold" style="line-height: 1;">{{ $sch->tanggal_kegiatan->format('M') }}</span>
                         </div>
-                        <div class="min-w-0">
-                            <h4 class="font-extrabold text-slate-700 text-xs truncate">{{ $sch->judul }}</h4>
-                            <p class="text-[10px] text-slate-450 mt-0.5 truncate">{{ $sch->tempat }}</p>
-                            <p class="text-[10px] text-emerald-650 mt-1 font-bold">{{ substr($sch->jam_mulai, 0, 5) }} - {{ substr($sch->jam_selesai, 0, 5) }} WIB</p>
+                        
+                        <!-- Content (Middle) -->
+                        <div class="min-w-0 flex-1 space-y-1">
+                            <h4 class="font-extrabold text-slate-800 text-xs sm:text-sm leading-snug group-hover:text-emerald-700 transition">
+                                {{ $sch->judul }}
+                            </h4>
+                            <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10.5px] text-slate-500 font-medium">
+                                <span class="flex items-center gap-1 text-emerald-600 font-bold whitespace-nowrap">
+                                    <svg class="w-3.5 h-3.5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    {{ substr($sch->jam_mulai, 0, 5) }} - {{ substr($sch->jam_selesai, 0, 5) }} WIB
+                                </span>
+                                <span class="text-slate-300 font-bold">&bull;</span>
+                                <span class="flex items-center gap-1 text-slate-500">
+                                    <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    <span>{{ $sch->tempat }}</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Action Arrow (Right) -->
+                        <div class="text-slate-400 group-hover:text-emerald-600 transition shrink-0 self-center pl-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </div>
                     </div>
                 @empty
-                    <div class="text-center py-4 text-xs text-slate-400">Belum ada agenda terdekat.</div>
+                    <div class="text-center py-6 text-xs text-slate-400 bg-slate-50 rounded-2xl">Belum ada agenda terdekat.</div>
                 @endforelse
             </div>
         </div>
 
         <!-- Announcements Card -->
-        <div id="announcements-section" class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
-            <h3 class="text-base font-extrabold text-slate-800 mb-4 flex items-center gap-2">
-                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18a6 6 0 100-12 6 6 0 000 12z"></path></svg>
-                Papan Pengumuman
-            </h3>
+        <div id="announcements-section" class="bg-white border border-slate-100 rounded-3xl p-5 sm:p-6 shadow-xs">
+            <div class="flex items-center justify-between gap-2 mb-4 border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18a6 6 0 100-12 6 6 0 000 12z"></path></svg>
+                    </div>
+                    <h3 class="text-sm sm:text-base font-extrabold text-slate-800">Papan Pengumuman</h3>
+                </div>
+                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 shrink-0">
+                    {{ $announcements->count() }} Pengumuman
+                </span>
+            </div>
             
-            <div class="space-y-4">
+            <div class="space-y-3">
                 @forelse($announcements as $ann)
-                    <div class="border-b border-slate-100 last:border-0 pb-3.5 last:pb-0 text-xs">
-                        <span class="text-[9px] font-bold text-slate-400 block mb-0.5">{{ $ann->tanggal_terbit ? $ann->tanggal_terbit->format('d M Y') : $ann->created_at->format('d M Y') }}</span>
-                        <h4 class="font-extrabold text-slate-700 leading-snug">{{ $ann->judul }}</h4>
-                        <p class="text-[10.5px] text-slate-500 mt-1 leading-relaxed">{{ $ann->konten }}</p>
+                    <div onclick="openAnnouncementModal({{ $ann->id }})" class="p-3.5 bg-slate-50/70 hover:bg-emerald-50/40 rounded-2xl border border-slate-100 hover:border-emerald-200 transition duration-200 cursor-pointer group flex items-center justify-between gap-3">
+                        <div class="min-w-0 flex-1 space-y-1">
+                            <span class="text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100 inline-block">
+                                {{ $ann->tanggal_terbit ? $ann->tanggal_terbit->format('d M Y') : $ann->created_at->format('d M Y') }}
+                            </span>
+                            <h4 class="font-extrabold text-slate-800 text-xs sm:text-sm leading-snug group-hover:text-emerald-700 transition truncate">{{ $ann->judul }}</h4>
+                            <p class="text-[11px] text-slate-500 line-clamp-1 leading-relaxed">{{ $ann->konten }}</p>
+                        </div>
+                        <div class="text-slate-300 group-hover:text-emerald-600 transition shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
                     </div>
                 @empty
-                    <div class="text-center py-4 text-xs text-slate-400">Belum ada pengumuman.</div>
+                    <div class="text-center py-6 text-xs text-slate-400 bg-slate-50 rounded-2xl">Belum ada pengumuman.</div>
                 @endforelse
             </div>
         </div>
@@ -458,25 +497,23 @@
 </div>
 
 <!-- Member Details Modal Layer (Overlay) -->
-<div id="memberDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
-    <div class="bg-white rounded-3xl w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-2xl border border-slate-100 flex flex-col p-6 animate-scaleUp">
+<div id="memberDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl sm:rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 flex flex-col p-4 sm:p-6 animate-scaleUp">
         
-        <!-- Header -->
-        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3 sm:pb-4 mb-4">
             <div>
-                <h3 class="text-base font-extrabold text-slate-800" id="modal-member-name">Nama Anggota</h3>
+                <h3 class="text-sm sm:text-base font-extrabold text-slate-800" id="modal-member-name">Nama Anggota</h3>
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400" id="modal-member-relation">Hubungan</span>
             </div>
-            <button onclick="closeMemberModal()" class="text-slate-400 hover:text-slate-700 transition cursor-pointer">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <button onclick="closeMemberModal()" class="text-slate-400 hover:text-slate-700 transition cursor-pointer p-1">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
 
-        <!-- Profile metadata -->
-        <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl text-xs mb-5 text-slate-650">
+        <div class="grid grid-cols-2 gap-3 sm:gap-4 bg-slate-50 p-3.5 sm:p-4 rounded-2xl text-xs mb-4 text-slate-650">
             <div>
                 <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Nomor NIK</span>
-                <span class="font-bold text-slate-800 block mt-0.5" id="modal-member-nik">-</span>
+                <span class="font-bold text-slate-800 block mt-0.5 break-all text-[11px] sm:text-xs" id="modal-member-nik">-</span>
             </div>
             <div>
                 <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Kategori Warga</span>
@@ -492,7 +529,6 @@
             </div>
         </div>
 
-        <!-- Health Records Table -->
         <div class="space-y-3 flex-1">
             <h4 class="font-extrabold text-slate-800 text-xs">Daftar Rekam Medis / Riwayat Pemeriksaan</h4>
             <div class="overflow-x-auto border border-slate-100 rounded-2xl">
@@ -507,7 +543,6 @@
                         </tr>
                     </thead>
                     <tbody id="modal-health-table-body" class="divide-y divide-slate-100">
-                        <!-- Injected via JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -516,27 +551,26 @@
 </div>
 
 <!-- Kader WhatsApp Modal Layer (Contact Hub) -->
-<div id="kaderModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
-    <div class="bg-white rounded-3xl w-full max-w-md shadow-2xl border border-slate-100 p-6">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+<div id="kaderModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl sm:rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 p-4 sm:p-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3 sm:pb-4 mb-4">
             <div>
-                <h3 class="text-base font-extrabold text-slate-800">Daftar Kader Aktif</h3>
+                <h3 class="text-sm sm:text-base font-extrabold text-slate-800">Daftar Kader Aktif</h3>
                 <p class="text-[9px] text-slate-400 mt-0.5">Hubungi kader posyandu jika ada keluhan atau pertanyaan</p>
             </div>
-            <button onclick="closeKaderModal()" class="text-slate-400 hover:text-slate-700 transition cursor-pointer">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <button onclick="closeKaderModal()" class="text-slate-400 hover:text-slate-700 transition cursor-pointer p-1">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
 
-        <div class="space-y-3.5">
+        <div class="space-y-3">
             @forelse($kaders as $kd)
-                <div class="flex items-center justify-between gap-4 p-3 bg-slate-50 border border-slate-100 rounded-2xl">
+                <div class="flex items-center justify-between gap-3 p-3 bg-slate-50 border border-slate-100 rounded-2xl">
                     <div class="min-w-0">
                         <h4 class="font-extrabold text-slate-850 text-xs truncate">{{ $kd->name }}</h4>
                         <p class="text-[10px] text-slate-400 font-semibold mt-0.5">Petugas Posyandu Desa</p>
                     </div>
                     @php
-                        // Normalize phone format for WhatsApp links
                         $waNum = preg_replace('/[^0-9]/', '', $kd->nomor_telepon);
                         if(strpos($waNum, '08') === 0) {
                             $waNum = '628' . substr($waNum, 2);
@@ -544,7 +578,7 @@
                     @endphp
                     <a href="https://wa.me/{{ $waNum }}?text=Halo%20Kader%20{{ urlencode($kd->name) }}%2C%20saya%20warga%20dari%20Keluarga%20Bapak%20{{ urlencode($user->kepala_keluarga) }}%20ingin%20berkonsultasi%20mengenai%20pelayanan%20Posyandu..." 
                         target="_blank" 
-                        class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[10px] px-3.5 py-2 rounded-xl transition flex items-center gap-1 shrink-0 shadow-sm cursor-pointer">
+                        class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[10px] px-3 py-2 rounded-xl transition flex items-center gap-1 shrink-0 shadow-sm cursor-pointer">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.73-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.858.002-2.634-1.023-5.11-2.884-6.974C16.568 1.909 14.1 .882 11.995.882c-5.442 0-9.867 4.42-9.87 9.86-.001 1.748.47 3.456 1.365 4.965L2.553 21.05l5.094-1.896z"></path></svg>
                         Hubungi
                     </a>
@@ -552,6 +586,112 @@
             @empty
                 <div class="text-center py-6 text-slate-400 text-xs">Belum ada kader terdaftar.</div>
             @endforelse
+        </div>
+    </div>
+</div>
+
+<!-- Schedule Details Modal Layer (Overlay) -->
+<div id="scheduleDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-3xl w-full max-w-md max-h-[85vh] flex flex-col shadow-2xl border border-slate-100 p-6 animate-scaleUp">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3 shrink-0 mb-3">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                Detail Agenda Posyandu
+            </span>
+            <button onclick="closeScheduleModal()" class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-1.5 rounded-full transition cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <div class="space-y-4 overflow-y-auto flex-1 my-2 pr-1">
+            <div>
+                <h3 class="text-base sm:text-lg font-black text-slate-900 leading-snug break-words" id="modal-schedule-title">Judul Agenda</h3>
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-2xl space-y-3 border border-slate-100/80 text-xs">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-white text-emerald-600 rounded-xl shadow-2xs shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div>
+                        <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Tanggal Kegiatan</span>
+                        <span class="font-extrabold text-slate-800 block" id="modal-schedule-date">-</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 border-t border-slate-200/60 pt-2.5">
+                    <div class="p-2 bg-white text-emerald-600 rounded-xl shadow-2xs shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Waktu Pelaksanaan</span>
+                        <span class="font-extrabold text-slate-800 block" id="modal-schedule-time">-</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 border-t border-slate-200/60 pt-2.5">
+                    <div class="p-2 bg-white text-emerald-600 rounded-xl shadow-2xs shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <div>
+                        <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Lokasi Pelayanan</span>
+                        <span class="font-extrabold text-slate-800 block break-words" id="modal-schedule-location">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <span class="text-[10px] uppercase font-extrabold text-slate-400 tracking-wider block">Deskripsi & Catatan Petugas</span>
+                <div class="bg-emerald-50/40 border-l-3 border-emerald-500 p-3.5 rounded-r-2xl text-xs text-slate-700 leading-relaxed whitespace-pre-line break-words max-h-48 overflow-y-auto" id="modal-schedule-description">
+                    -
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 shrink-0">
+            <button onclick="closeScheduleModal()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-xl transition cursor-pointer">
+                Tutup Informasi
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Announcement Details Modal Layer (Overlay) -->
+<div id="announcementDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-3xl w-full max-w-md max-h-[85vh] flex flex-col shadow-2xl border border-slate-100 p-6 animate-scaleUp">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3 shrink-0 mb-3">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-100">
+                Pengumuman Posyandu
+            </span>
+            <button onclick="closeAnnouncementModal()" class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-1.5 rounded-full transition cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <div class="space-y-4 overflow-y-auto flex-1 my-2 pr-1">
+            <div>
+                <h3 class="text-base sm:text-lg font-black text-slate-900 leading-snug break-words" id="modal-announcement-title">Judul Pengumuman</h3>
+            </div>
+
+            <div class="flex items-center justify-between gap-2 text-xs text-slate-500 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-100/80">
+                <span class="font-medium flex items-center gap-1" id="modal-announcement-date">
+                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Diterbitkan: -
+                </span>
+                <span class="font-bold text-emerald-700 flex items-center gap-1" id="modal-announcement-author">
+                    Oleh: Kader
+                </span>
+            </div>
+
+            <div class="space-y-1.5">
+                <span class="text-[10px] uppercase font-extrabold text-slate-400 tracking-wider block">Isi Pengumuman Lengkap</span>
+                <div class="bg-slate-50 border border-slate-100/80 p-3.5 rounded-2xl text-xs text-slate-700 leading-relaxed whitespace-pre-line break-words max-h-52 overflow-y-auto" id="modal-announcement-content">
+                    -
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 shrink-0">
+            <button onclick="closeAnnouncementModal()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-xl transition cursor-pointer">
+                Tutup Pengumuman
+            </button>
         </div>
     </div>
 </div>
@@ -647,14 +787,73 @@
         memberModal.classList.add('hidden');
     }
 
+    // 4. Schedule & Announcement Detail Modals
+    const schedulesList = {!! json_encode($schedules) !!};
+    const announcementsList = {!! json_encode($announcements) !!};
+
+    const scheduleModal = document.getElementById('scheduleDetailModal');
+    function openScheduleModal(schId) {
+        const sch = schedulesList.find(s => s.id === schId);
+        if (!sch) return;
+
+        document.getElementById('modal-schedule-title').innerText = sch.judul;
+        
+        let formattedDate = sch.tanggal_kegiatan;
+        try {
+            const d = new Date(sch.tanggal_kegiatan);
+            formattedDate = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        } catch(e) {}
+        
+        document.getElementById('modal-schedule-date').innerText = formattedDate;
+        
+        const startTime = sch.jam_mulai ? sch.jam_mulai.substring(0, 5) : '08:00';
+        const endTime = sch.jam_selesai ? sch.jam_selesai.substring(0, 5) : '12:00';
+        document.getElementById('modal-schedule-time').innerText = startTime + ' - ' + endTime + ' WIB';
+        
+        document.getElementById('modal-schedule-location').innerText = sch.tempat;
+        document.getElementById('modal-schedule-description').innerText = sch.deskripsi ? sch.deskripsi : 'Tidak ada catatan tambahan untuk kegiatan ini.';
+
+        scheduleModal.classList.remove('hidden');
+    }
+    function closeScheduleModal() {
+        if(scheduleModal) scheduleModal.classList.add('hidden');
+    }
+
+    const announcementModal = document.getElementById('announcementDetailModal');
+    function openAnnouncementModal(annId) {
+        const ann = announcementsList.find(a => a.id === annId);
+        if (!ann) return;
+
+        document.getElementById('modal-announcement-title').innerText = ann.judul;
+        
+        let pubDate = ann.tanggal_terbit || ann.created_at;
+        try {
+            const d = new Date(pubDate);
+            pubDate = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        } catch(e) {}
+        
+        document.getElementById('modal-announcement-date').innerText = 'Diterbitkan: ' + pubDate;
+        document.getElementById('modal-announcement-author').innerText = ann.pembuat ? 'Oleh: ' + ann.pembuat.name : 'Oleh: Kader Posyandu';
+        document.getElementById('modal-announcement-content').innerText = ann.konten;
+
+        announcementModal.classList.remove('hidden');
+    }
+    function closeAnnouncementModal() {
+        if(announcementModal) announcementModal.classList.add('hidden');
+    }
+
     // Close modals on clicking backdrop
     window.addEventListener('click', function (e) {
         if (e.target === memberModal) closeMemberModal();
         if (e.target === kaderModal) closeKaderModal();
+        if (e.target === scheduleModal) closeScheduleModal();
+        if (e.target === announcementModal) closeAnnouncementModal();
     });
 
-    // 4. Live Queue Status Polling (Every 3 seconds)
+    // 4. Live Queue Status Polling (Every 3 seconds with inactive tab optimization)
     function pollQueueStatus() {
+        if (document.hidden) return; // Skip polling when tab is inactive to save battery and network
+
         fetch('{{ route("warga.queue.status") }}')
             .then(response => response.json())
             .then(data => {
@@ -717,6 +916,13 @@
     // Run polling
     setInterval(pollQueueStatus, 3000);
     pollQueueStatus();
+
+    // Immediately fetch fresh status when user switches back to this tab
+    document.addEventListener("visibilitychange", function() {
+        if (!document.hidden) {
+            pollQueueStatus();
+        }
+    });
 
     // 5. Mark All Notifications as Read dynamically
     function markAllNotificationsAsRead() {

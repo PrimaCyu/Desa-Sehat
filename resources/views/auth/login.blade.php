@@ -41,7 +41,7 @@
                     </div>
                 </div>
 
-                <!-- Password Input -->
+                
                 <div>
                     <label for="password" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Password</label>
                     <div class="relative">
@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <!-- Remember Me -->
+            
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <input id="remember" name="remember" type="checkbox" 
@@ -103,7 +103,7 @@
                 </p>
                 <div class="pt-1.5 border-t border-emerald-250/50 text-[11px]">
                     <span class="font-bold text-emerald-800">Silakan Hubungi Ketua Kader:</span>
-                    <p class="mt-0.5 text-slate-650">Ibu Aminah (Ketua Kader) - <a href="https://wa.me/6281234567890" target="_blank" class="font-bold text-emerald-700 hover:underline">0812-3456-7890</a></p>
+                    <p class="mt-0.5 text-slate-650">Buk Marni (Ketua Kader) - <a href="https://wa.me/6281234567890" target="_blank" class="font-bold text-emerald-700 hover:underline">0812-3456-7890</a></p>
                 </div>
             </div>
         </form>

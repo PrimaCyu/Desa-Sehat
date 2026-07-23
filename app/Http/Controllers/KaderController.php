@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Pengguna;
 use App\Models\Peran;
 use App\Models\AnggotaKeluarga;
@@ -220,26 +221,29 @@ class KaderController extends Controller
     }
 
     /**
-     * Change queue status to "dilayani" (Call).
+     * Change queue status to "dilayani" (Call) safely in DB transaction.
      */
     public function callQueue($id)
     {
-        $queue = Antrean::findOrFail($id);
-        
-        // Reset any other "serving" queues to "waiting"
-        Antrean::whereDate('tanggal_antrean', Carbon::today())
-            ->where('status', 'dilayani')
-            ->update(['status' => 'menunggu']);
+        return DB::transaction(function () use ($id) {
+            $queue = Antrean::findOrFail($id);
+            
+            // Reset any other "serving" queues to "waiting"
+            Antrean::whereDate('tanggal_antrean', Carbon::today())
+                ->where('status', 'dilayani')
+                ->lockForUpdate()
+                ->update(['status' => 'menunggu']);
 
-        $queue->update([
-            'status' => 'dilayani',
-            'dipanggil_at' => Carbon::now(),
-            'dilayani_at' => Carbon::now(),
-        ]);
+            $queue->update([
+                'status' => 'dilayani',
+                'dipanggil_at' => Carbon::now(),
+                'dilayani_at' => Carbon::now(),
+            ]);
 
-        LogAudit::log('panggil_antrean', "Kader memanggil antrean {$queue->kode_antrean} ({$queue->pengguna->kepala_keluarga})");
+            LogAudit::log('panggil_antrean', "Kader memanggil antrean {$queue->kode_antrean} ({$queue->pengguna->kepala_keluarga})");
 
-        return back()->with('success', "Memanggil antrean {$queue->kode_antrean}!");
+            return back()->with('success', "Memanggil antrean {$queue->kode_antrean}!");
+        });
     }
 
     /**

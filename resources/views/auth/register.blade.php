@@ -11,13 +11,16 @@
         <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-teal-500/10 rounded-full blur-3xl"></div>
 
         <div class="text-center relative z-10">
-            <div class="inline-flex bg-gradient-to-tr from-emerald-400 to-teal-500 text-white p-3.5 rounded-2xl shadow-lg shadow-emerald-100 mb-4">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                </svg>
+            <div class="flex flex-col items-center justify-center mb-4">
+                <img src="{{ asset('images/logo-icon.png') }}" alt="Logo DesaSehat" class="h-28 sm:h-36 w-auto object-contain transition-transform duration-300 hover:scale-105 mb-3">
+                <h1 class="text-3xl font-black text-slate-800 tracking-tight">
+                    Desa<span class="text-emerald-600">Sehat</span>
+                </h1>
+                <span class="text-xs uppercase font-extrabold tracking-widest text-emerald-600 mt-0.5">
+                    Posyandu Digital
+                </span>
             </div>
-            <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Daftar Akun Warga</h2>
-            <p class="mt-2 text-sm text-slate-500 font-medium">
+            <p class="mt-1 text-xs text-slate-500 font-medium">
                 Pendaftaran mandiri akun perwakilan keluarga (Kartu Keluarga)
             </p>
         </div>

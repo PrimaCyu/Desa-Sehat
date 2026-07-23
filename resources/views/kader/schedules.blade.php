@@ -3,10 +3,10 @@
 @section('title', 'Kelola Jadwal Posyandu')
 
 @section('content')
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
     <div>
-        <h2 class="text-xl font-bold text-slate-800">Jadwal Kegiatan & Pelayanan Posyandu</h2>
-        <p class="text-xs text-slate-400">Atur kalender kegiatan Posyandu DesaSehat</p>
+        <h2 class="text-xl font-bold text-slate-800 tracking-tight">Jadwal Kegiatan & Pelayanan Posyandu</h2>
+        <p class="text-xs text-slate-500 font-medium mt-0.5">Atur kalender kegiatan Posyandu DesaSehat</p>
     </div>
 </div>
 
@@ -15,43 +15,60 @@
     <!-- List Schedules Panel (2/3 width) -->
     <div class="lg:col-span-2 space-y-4">
         
-        <!-- Table Card -->
-        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
+        <!-- Table Card (Clean & Minimalist Layout, Multi-Device Responsive) -->
+        <div class="bg-white border border-slate-100 rounded-3xl p-4 sm:p-6 shadow-xs overflow-hidden">
+            <div class="overflow-x-auto overflow-y-hidden">
+                <table class="w-full table-fixed min-w-[640px] md:min-w-0 text-left border-collapse align-middle text-xs">
                     <thead>
-                        <tr class="border-b border-slate-100 text-slate-400 font-semibold">
-                            <th class="pb-3">Tanggal</th>
-                            <th class="pb-3">Judul Kegiatan</th>
-                            <th class="pb-3">Tempat</th>
-                            <th class="pb-3">Waktu</th>
-                            <th class="pb-3 text-right">Aksi</th>
+                        <tr class="border-b border-slate-200/80 text-slate-500 font-semibold text-[11px] uppercase tracking-wider">
+                            <th class="py-3 px-4 w-[18%] min-w-[110px] whitespace-nowrap">Tanggal</th>
+                            <th class="py-3 px-4 w-[37%]">Judul Kegiatan</th>
+                            <th class="py-3 px-4 w-[20%]">Tempat</th>
+                            <th class="py-3 px-4 w-[15%] whitespace-nowrap">Waktu</th>
+                            <th class="py-3 px-4 w-[10%] text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @forelse($schedules as $s)
-                            <tr class="hover:bg-slate-50/60 transition-colors">
-                                <td class="py-3.5 font-bold text-slate-500 whitespace-nowrap">
-                                    {{ $s->tanggal_kegiatan->format('d M Y') }}
+                            <tr class="hover:bg-slate-50/60 transition-colors align-middle">
+                                <!-- 1. Tanggal (15%) -->
+                                <td class="py-3.5 px-4 font-bold text-slate-600 align-middle whitespace-nowrap">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        <span class="truncate">{{ $s->tanggal_kegiatan->format('d M Y') }}</span>
+                                    </div>
                                 </td>
-                                <td class="py-3.5">
-                                    <span class="font-bold text-slate-700 block">{{ $s->judul }}</span>
-                                    @if($s->deskripsi)
-                                        <span class="text-[10px] text-slate-400 block mt-0.5 max-w-[200px] truncate" title="{{ $s->deskripsi }}">{{ $s->deskripsi }}</span>
-                                    @endif
+
+                                <!-- 2. Judul Kegiatan (35% - 1 baris ringkas) -->
+                                <td class="py-3.5 px-4 align-middle">
+                                    <span class="font-semibold text-slate-800 text-xs block truncate" title="{{ $s->judul }}">{{ $s->judul }}</span>
                                 </td>
-                                <td class="py-3.5 text-slate-600 font-medium">{{ $s->tempat }}</td>
-                                <td class="py-3.5 text-slate-500 font-bold whitespace-nowrap">
-                                    {{ substr($s->jam_mulai, 0, 5) }} - {{ substr($s->jam_selesai, 0, 5) }} WIB
+
+                                <!-- 3. Tempat (20%) -->
+                                <td class="py-3.5 px-4 text-slate-600 font-medium align-middle truncate" title="{{ $s->tempat }}">{{ $s->tempat }}</td>
+
+                                <!-- 4. Waktu (15%) -->
+                                <td class="py-3.5 px-4 text-slate-600 font-semibold align-middle whitespace-nowrap">
+                                    <span class="inline-block bg-slate-50 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200/70 text-[11px]">
+                                        {{ substr($s->jam_mulai, 0, 5) }} - {{ substr($s->jam_selesai, 0, 5) }} WIB
+                                    </span>
                                 </td>
-                                <td class="py-3.5 text-right">
-                                    <form action="{{ route('kader.schedules.delete', $s->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal kegiatan ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-rose-500 hover:text-rose-600 font-bold px-2.5 py-1.5 rounded-lg transition cursor-pointer">
-                                            Hapus
+
+                                <!-- 5. Aksi (15% - Detail & Hapus) -->
+                                <td class="py-3.5 px-4 text-right align-middle whitespace-nowrap">
+                                    <div class="inline-flex items-center gap-1.5 justify-end">
+                                        <button type="button" onclick="openScheduleDetailModal({{ $s->id }})" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-2.5 py-1.5 rounded-lg transition cursor-pointer text-xs border border-slate-200/70 inline-flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                            Detail
                                         </button>
-                                    </form>
+                                        <form action="{{ route('kader.schedules.delete', $s->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal kegiatan ini?')" class="inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 hover:text-rose-700 font-semibold px-2.5 py-1.5 rounded-lg transition cursor-pointer text-xs">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -72,53 +89,56 @@
 
     <!-- Create Schedule Panel -->
     <div>
-        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs sticky top-22">
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs relative lg:sticky lg:top-20">
             <div class="flex items-center gap-2.5 mb-6">
-                <div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl border border-emerald-100/80">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 </div>
-                <h3 class="text-base font-bold text-slate-800">Buat Jadwal Baru</h3>
+                <div>
+                    <h3 class="text-base font-bold text-slate-800">Buat Jadwal Baru</h3>
+                    <p class="text-[11px] text-slate-400 font-medium">Isi detail agenda pelayanan</p>
+                </div>
             </div>
 
             <form action="{{ route('kader.schedules.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
-                    <label for="title" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nama Kegiatan</label>
+                    <label for="title" class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Nama Kegiatan</label>
                     <input type="text" id="title" name="title" required value="{{ old('title') }}"
-                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-hidden transition" 
+                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-hidden transition placeholder:text-slate-400" 
                         placeholder="Contoh: Posyandu Balita & Imunisasi">
                 </div>
                 <div>
-                    <label for="event_date" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tanggal Kegiatan</label>
+                    <label for="event_date" class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Tanggal Kegiatan</label>
                     <input type="date" id="event_date" name="event_date" required value="{{ old('event_date') }}"
-                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-hidden transition">
+                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-hidden transition">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label for="start_time" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Jam Mulai</label>
+                        <label for="start_time" class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Jam Mulai</label>
                         <input type="time" id="start_time" name="start_time" required value="{{ old('start_time', '08:00') }}"
-                            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-hidden transition">
+                            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-hidden transition">
                     </div>
                     <div>
-                        <label for="end_time" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Jam Selesai</label>
+                        <label for="end_time" class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Jam Selesai</label>
                         <input type="time" id="end_time" name="end_time" required value="{{ old('end_time', '12:00') }}"
-                            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-hidden transition">
+                            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-hidden transition">
                     </div>
                 </div>
                 <div>
-                    <label for="location" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tempat Kegiatan</label>
+                    <label for="location" class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Tempat Kegiatan</label>
                     <input type="text" id="location" name="location" required value="{{ old('location') }}"
-                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-hidden transition" 
+                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-hidden transition placeholder:text-slate-400" 
                         placeholder="Contoh: Balai Desa RW 02">
                 </div>
                 <div>
-                    <label for="description" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Deskripsi Tambahan</label>
+                    <label for="description" class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Deskripsi Tambahan</label>
                     <textarea id="description" name="description" rows="3"
-                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-hidden transition" 
+                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-hidden transition leading-relaxed placeholder:text-slate-400" 
                         placeholder="Keterangan pendukung jika ada...">{{ old('description') }}</textarea>
                 </div>
 
-                <button type="submit" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl text-xs font-semibold shadow-md shadow-emerald-100 hover:shadow-lg transition cursor-pointer">
+                <button type="submit" class="w-full py-3 px-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl text-xs font-semibold shadow-md shadow-emerald-100 hover:shadow-lg transition cursor-pointer">
                     Simpan Jadwal Kegiatan
                 </button>
             </form>
@@ -126,4 +146,98 @@
     </div>
 
 </div>
+
+<!-- Modal Detail Jadwal Kegiatan -->
+<div id="scheduleDetailModal" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[85vh] flex flex-col p-6 shadow-2xl border border-slate-100 transform transition-all">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 shrink-0">
+            <div class="flex items-center gap-2.5">
+                <div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="text-base font-bold text-slate-800">Detail Agenda Posyandu</h3>
+            </div>
+            <button onclick="closeScheduleDetailModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <!-- Scrollable Modal Body -->
+        <div class="space-y-4 overflow-y-auto flex-1 my-3 pr-1">
+            <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Nama Kegiatan</span>
+                <h4 id="detail-schedule-title" class="text-base font-extrabold text-slate-800 leading-snug break-words"></h4>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 bg-slate-50/80 p-3.5 rounded-2xl border border-slate-100 text-xs">
+                <div>
+                    <span class="text-[10px] font-semibold text-slate-400 uppercase block mb-0.5">Tanggal</span>
+                    <span id="detail-schedule-date" class="font-bold text-slate-700 block"></span>
+                </div>
+                <div>
+                    <span class="text-[10px] font-semibold text-slate-400 uppercase block mb-0.5">Waktu</span>
+                    <span id="detail-schedule-time" class="font-bold text-emerald-600 block"></span>
+                </div>
+            </div>
+
+            <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Tempat Kegiatan</span>
+                <p id="detail-schedule-location" class="text-xs font-semibold text-slate-700 bg-slate-50/50 p-3 rounded-xl border border-slate-100 break-words"></p>
+            </div>
+
+            <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Deskripsi Tambahan</span>
+                <div id="detail-schedule-description" class="text-xs text-slate-600 leading-relaxed bg-slate-50/50 p-3.5 rounded-2xl border border-slate-100 whitespace-pre-line break-words max-h-48 overflow-y-auto"></div>
+            </div>
+        </div>
+
+        <!-- Fixed Footer -->
+        <div class="pt-3 border-t border-slate-100 flex justify-end shrink-0">
+            <button onclick="closeScheduleDetailModal()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold text-xs px-5 py-2.5 rounded-xl transition cursor-pointer">
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@section('scripts')
+<script>
+    const schedulesList = {!! json_encode($schedules->items()) !!};
+    const modal = document.getElementById('scheduleDetailModal');
+
+    function openScheduleDetailModal(id) {
+        const sch = schedulesList.find(s => Number(s.id) === Number(id));
+        if (!sch) return;
+
+        document.getElementById('detail-schedule-title').innerText = sch.judul;
+        
+        let formattedDate = sch.tanggal_kegiatan;
+        try {
+            const d = new Date(sch.tanggal_kegiatan);
+            formattedDate = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        } catch(e) {}
+
+        document.getElementById('detail-schedule-date').innerText = formattedDate;
+        
+        const startTime = sch.jam_mulai ? sch.jam_mulai.substring(0, 5) : '08:00';
+        const endTime = sch.jam_selesai ? sch.jam_selesai.substring(0, 5) : '12:00';
+        document.getElementById('detail-schedule-time').innerText = startTime + ' - ' + endTime + ' WIB';
+        
+        document.getElementById('detail-schedule-location').innerText = sch.tempat;
+        document.getElementById('detail-schedule-description').innerText = sch.deskripsi ? sch.deskripsi : 'Tidak ada deskripsi tambahan.';
+
+        if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeScheduleDetailModal() {
+        if (modal) modal.classList.add('hidden');
+    }
+
+    window.addEventListener('click', function(e) {
+        if (e.target === modal) closeScheduleDetailModal();
+    });
+</script>
 @endsection
