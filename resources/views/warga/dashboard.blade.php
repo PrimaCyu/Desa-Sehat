@@ -232,12 +232,16 @@
     <div class="lg:col-span-2 space-y-6">
         
         <!-- Family Members Grid -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+        <div id="members-section" class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs space-y-6">
+            <div class="flex flex-col sm:flex-row items-center sm:items-center justify-between text-center sm:text-left gap-3">
                 <div>
-                    <h3 class="text-base font-extrabold text-slate-800">Anggota Keluarga Terdaftar</h3>
+                    <h3 class="text-base font-extrabold text-slate-800 flex items-center justify-center sm:justify-start gap-2">
+                        <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <span>Anggota Keluarga Terdaftar</span>
+                    </h3>
                     <p class="text-[10px] sm:text-xs text-slate-400 mt-0.5">Pilih salah satu kartu untuk riwayat kesehatan detail</p>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
+                <div class="flex items-center justify-center gap-2 shrink-0 w-full sm:w-auto">
                     <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100/80 whitespace-nowrap shrink-0">
                         {{ $members->count() }} Orang
                     </span>
@@ -850,7 +854,7 @@
         if (e.target === announcementModal) closeAnnouncementModal();
     });
 
-    // 4. Live Queue Status Polling (Every 3 seconds with inactive tab optimization)
+    
     function pollQueueStatus() {
         if (document.hidden) return; // Skip polling when tab is inactive to save battery and network
 
@@ -924,7 +928,7 @@
         }
     });
 
-    // 5. Mark All Notifications as Read dynamically
+    
     function markAllNotificationsAsRead() {
         fetch('{{ route("warga.notifications.read") }}', {
             method: 'POST',
@@ -984,7 +988,7 @@
     @endif
 </script>
 
-<!-- Modal Tambah Anggota Keluarga -->
+
 <div id="add-member-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
     <!-- Backdrop -->
     <div onclick="closeAddMemberModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity duration-300"></div>
