@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
 
         // 2. Seed Pengguna (Akun-Akun Kader Posyandu)
         $kaderUser1 = Pengguna::create([
-            'name' => 'Kader Ibu Marni (Utama)',
+            'name' => 'Kader Ibu Marni',
             'username' => 'kader',
             'email' => 'kader@desasehat.go.id',
             'password' => Hash::make('password'),
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $kaderUser2 = Pengguna::create([
-            'name' => 'Kader Ibu Siti (Administrasi)',
+            'name' => 'Kader Ibu Siti',
             'username' => 'kader_admin',
             'email' => 'kader_admin@desasehat.go.id',
             'password' => Hash::make('password'),
@@ -106,7 +106,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 4. Seed Anggota Keluarga under Warga accounts
-        // Family 1 Members
         \App\Models\AnggotaKeluarga::create([
             'pengguna_id' => $warga1->id,
             'nik' => '3201010304050001',
