@@ -774,4 +774,92 @@ class KaderController extends Controller
         $logs = LogAudit::with('pengguna')->orderBy('created_at', 'desc')->paginate(30);
         return view('kader.audit-logs', compact('logs'));
     }
+
+    /**
+     * Display Kader Accounts Management (Kader Utama Only).
+     */
+    public function kadersIndex()
+    {
+        if (!Auth::user()->isKaderUtama()) {
+            return redirect()->route('kader.dashboard')->with('error', 'Akses ditolak. Fitur ini khusus untuk Kader Utama / Koordinator Posyandu.');
+        }
+
+        $kaders = Pengguna::whereHas('peran', function ($q) {
+            $q->where('nama', 'kader');
+        })->orderBy('created_at', 'asc')->get();
+
+        return view('kader.kaders', compact('kaders'));
+    }
+
+    /**
+     * Store a new Kader account (Kader Utama Only).
+     */
+    public function storeKader(Request $request)
+    {
+        if (!Auth::user()->isKaderUtama()) {
+            return redirect()->route('kader.dashboard')->with('error', 'Akses ditolak. Fitur ini khusus untuk Kader Utama / Koordinator Posyandu.');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:100|unique:pengguna,username',
+            'email' => 'required|email|max:255|unique:pengguna,email',
+            'nomor_telepon' => 'nullable|string|max:20',
+            'password' => 'required|string|min:6',
+        ], [
+            'username.unique' => 'Username ini sudah digunakan kader lain.',
+            'email.unique' => 'Email ini sudah terdaftar di sistem.',
+            'password.min' => 'Password minimal 6 karakter.',
+        ]);
+
+        $kaderRole = Peran::where('nama', 'kader')->firstOrFail();
+
+        $kaderBaru = Pengguna::create([
+            'name' => $request->name,
+            'username' => strtolower(trim($request->username)),
+            'email' => strtolower(trim($request->email)),
+            'password' => Hash::make($request->password),
+            'peran_id' => $kaderRole->id,
+            'nomor_telepon' => $request->nomor_telepon,
+        ]);
+
+        LogAudit::log(
+            'tambah_kader',
+            "Kader Utama '" . Auth::user()->name . "' menambahkan akun Kader baru: {$kaderBaru->name} (Username: {$kaderBaru->username})",
+            Auth::id()
+        );
+
+        return redirect()->route('kader.kaders.index')->with('success', "Berhasil menambahkan Akun Kader Baru: '{$kaderBaru->name}'!");
+    }
+
+    /**
+     * Delete a Kader account (Kader Utama Only).
+     */
+    public function deleteKader($id)
+    {
+        if (!Auth::user()->isKaderUtama()) {
+            return redirect()->route('kader.dashboard')->with('error', 'Akses ditolak. Fitur ini khusus untuk Kader Utama / Koordinator Posyandu.');
+        }
+
+        if ($id == Auth::id()) {
+            return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+        }
+
+        $kaderTarget = Pengguna::whereHas('peran', function ($q) {
+            $q->where('nama', 'kader');
+        })->findOrFail($id);
+
+        $namaTarget = $kaderTarget->name;
+        $usernameTarget = $kaderTarget->username;
+
+        $kaderTarget->delete();
+
+        LogAudit::log(
+            'hapus_kader',
+            "Kader Utama '" . Auth::user()->name . "' menghapus akun Kader: {$namaTarget} ({$usernameTarget})",
+            Auth::id()
+        );
+
+        return redirect()->route('kader.kaders.index')->with('success', "Akun Kader '{$namaTarget}' berhasil dihapus.");
+    }
 }

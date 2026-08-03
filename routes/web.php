@@ -76,6 +76,11 @@ Route::middleware(['auth'])->group(function () {
         
         // Security Audit Logs
         Route::get('/audit-logs', [KaderController::class, 'auditLogs'])->name('audit-logs');
+
+        // Manage Kader Accounts (Kader Utama Only)
+        Route::get('/kaders', [KaderController::class, 'kadersIndex'])->name('kaders.index');
+        Route::post('/kaders', [KaderController::class, 'storeKader'])->name('kaders.store');
+        Route::delete('/kaders/{id}', [KaderController::class, 'deleteKader'])->name('kaders.delete');
     });
 
 });

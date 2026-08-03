@@ -73,6 +73,11 @@ class Pengguna extends Authenticatable
         return $this->peran && $this->peran->nama === 'kader';
     }
 
+    public function isKaderUtama(): bool
+    {
+        return $this->isKader() && in_array($this->username, ['kader', 'kader_utama']);
+    }
+
     public function isWarga(): bool
     {
         return $this->peran && $this->peran->nama === 'warga';

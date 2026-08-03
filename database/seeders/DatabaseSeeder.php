@@ -27,14 +27,59 @@ class DatabaseSeeder extends Seeder
             'deskripsi' => 'Akun keluarga warga desa, login berbasis nomor KK',
         ]);
 
-        // 2. Seed Pengguna (Default Administrator Kader)
-        $kaderUser = Pengguna::create([
-            'name' => 'Kader Ibu Ani',
+        // 2. Seed Pengguna (Akun-Akun Kader Posyandu)
+        $kaderUser1 = Pengguna::create([
+            'name' => 'Kader Ibu Marni (Utama)',
             'username' => 'kader',
             'email' => 'kader@desasehat.go.id',
             'password' => Hash::make('password'),
             'peran_id' => $kaderPeran->id,
             'nomor_telepon' => '081277778888',
+        ]);
+
+        $kaderUser2 = Pengguna::create([
+            'name' => 'Kader Ibu Siti (Administrasi)',
+            'username' => 'kader_admin',
+            'email' => 'kader_admin@desasehat.go.id',
+            'password' => Hash::make('password'),
+            'peran_id' => $kaderPeran->id,
+            'nomor_telepon' => '081277778889',
+        ]);
+
+        $kaderUser3 = Pengguna::create([
+            'name' => 'Kader Ibu Sri (Antrean & Ukur)',
+            'username' => 'kader_antrian',
+            'email' => 'kader_antrian@desasehat.go.id',
+            'password' => Hash::make('password'),
+            'peran_id' => $kaderPeran->id,
+            'nomor_telepon' => '081277778890',
+        ]);
+
+        $kaderUser4 = Pengguna::create([
+            'name' => 'Kader Bidan Dewi (Pelayanan 1)',
+            'username' => 'kader_pelayanan1',
+            'email' => 'kader_pelayanan1@desasehat.go.id',
+            'password' => Hash::make('password'),
+            'peran_id' => $kaderPeran->id,
+            'nomor_telepon' => '081277778891',
+        ]);
+
+        $kaderUser5 = Pengguna::create([
+            'name' => 'Kader Bidan Ratna (Pelayanan 2)',
+            'username' => 'kader_pelayanan2',
+            'email' => 'kader_pelayanan2@desasehat.go.id',
+            'password' => Hash::make('password'),
+            'peran_id' => $kaderPeran->id,
+            'nomor_telepon' => '081277778892',
+        ]);
+
+        $kaderUser6 = Pengguna::create([
+            'name' => 'Kader Ibu Nur (Penyuluhan & Gizi)',
+            'username' => 'kader_penyuluhan',
+            'email' => 'kader_penyuluhan@desasehat.go.id',
+            'password' => Hash::make('password'),
+            'peran_id' => $kaderPeran->id,
+            'nomor_telepon' => '081277778893',
         ]);
 
         // 3. Seed Warga Accounts (Login using username / No. KK)
