@@ -9,10 +9,11 @@ class Notifikasi extends Model
 {
     protected $table = 'notifikasi';
 
-    protected $fillable = ['penerima_pengguna_id', 'judul', 'pesan', 'dibaca'];
+    protected $fillable = ['penerima_pengguna_id', 'judul', 'pesan', 'dibaca', 'waktu_kirim'];
 
     protected $casts = [
         'dibaca' => 'boolean',
+        'waktu_kirim' => 'datetime',
     ];
 
     public function penerima(): BelongsTo

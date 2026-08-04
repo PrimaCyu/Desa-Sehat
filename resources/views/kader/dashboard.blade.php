@@ -171,110 +171,13 @@
     </div>
 </div>
 
-<!-- Command Center Grid System -->
+<!-- Command Center Main Grid System (Seamless Balanced Layout) -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
 
-    <!-- Left: Smart Priority Panel (2/3 width) -->
+    <!-- Left Column (2/3 width) -->
     <div class="lg:col-span-2 space-y-6">
-        
-        <!-- Smart Priority Panel -->
-        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs relative overflow-hidden">
-            <div class="absolute -top-12 -right-12 w-28 h-28 bg-rose-50 rounded-full blur-2xl"></div>
-            <div class="flex items-center gap-2.5 mb-6 relative z-10">
-                <div class="p-2 bg-rose-50 text-rose-500 rounded-xl">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="text-base font-extrabold text-slate-800">Smart Priority Panel (Prioritas Penanganan)</h3>
-                    <p class="text-[10px] text-slate-400 mt-0.5">Sistem memindai otomatis warga yang terlambat jadwal kontrol</p>
-                </div>
-            </div>
 
-            <!-- List Priorities -->
-            <div class="space-y-4">
-                <!-- Ibu Hamil Overdue -->
-                @if($prioritasBumil->count() > 0)
-                    <div class="bg-rose-50/40 border border-rose-100 rounded-2xl p-4 space-y-3">
-                        <span class="text-[9px] font-extrabold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100 uppercase tracking-wider">Ibu Hamil Terlambat Kontrol (&gt;30 Hari)</span>
-                        <div class="divide-y divide-rose-100/50">
-                            @foreach($prioritasBumil as $bumil)
-                                <div class="py-2 flex items-center justify-between gap-4 first:pt-0 last:pb-0 text-xs">
-                                    <div class="min-w-0">
-                                        <h5 class="font-extrabold text-slate-800 truncate">{{ $bumil->nama }}</h5>
-                                        <p class="text-[10px] text-slate-400 mt-0.5 truncate">KK Bpk: {{ $bumil->pengguna->kepala_keluarga ?? '-' }} &bull; Kontak: {{ $bumil->pengguna->nomor_telepon ?? '-' }}</p>
-                                    </div>
-                                    <a href="{{ route('kader.families.show', $bumil->pengguna_id) }}" class="bg-white hover:bg-rose-50 text-rose-600 hover:text-rose-700 border border-rose-200 px-3 py-1.5 rounded-xl font-bold transition shrink-0">Kelola</a>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
-
-                <!-- Anak/Bayi Overdue -->
-                @if($prioritasAnak->count() > 0)
-                    <div class="bg-amber-50/40 border border-amber-100 rounded-2xl p-4 space-y-3">
-                        <span class="text-[9px] font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100 uppercase tracking-wider">Bayi / Balita Lewat Jadwal Timbang (&gt;30 Hari)</span>
-                        <div class="divide-y divide-amber-100/50">
-                            @foreach($prioritasAnak as $anak)
-                                <div class="py-2 flex items-center justify-between gap-4 first:pt-0 last:pb-0 text-xs">
-                                    <div class="min-w-0">
-                                        <h5 class="font-extrabold text-slate-800 truncate">{{ $anak->nama }} <span class="text-[9px] text-slate-400 bg-slate-200/50 px-2 py-0.2 rounded">({{ $anak->umur }})</span></h5>
-                                        <p class="text-[10px] text-slate-400 mt-0.5 truncate">Orang Tua: {{ $anak->pengguna->kepala_keluarga ?? '-' }}</p>
-                                    </div>
-                                    <a href="{{ route('kader.families.show', $anak->pengguna_id) }}" class="bg-white hover:bg-amber-50 text-amber-600 hover:text-amber-700 border border-amber-200 px-3 py-1.5 rounded-xl font-bold transition shrink-0">Kelola</a>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
-
-                <!-- Lansia Overdue -->
-                @if($prioritasLansia->count() > 0)
-                    <div class="bg-indigo-50/40 border border-indigo-100 rounded-2xl p-4 space-y-3">
-                        <span class="text-[9px] font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100 uppercase tracking-wider">Lansia Terlambat Pemeriksaan Rutin (&gt;60 Hari)</span>
-                        <div class="divide-y divide-indigo-100/50">
-                            @foreach($prioritasLansia as $lansia)
-                                <div class="py-2 flex items-center justify-between gap-4 first:pt-0 last:pb-0 text-xs">
-                                    <div class="min-w-0">
-                                        <h5 class="font-extrabold text-slate-800 truncate">{{ $lansia->nama }} ({{ $lansia->umur }})</h5>
-                                        <p class="text-[10px] text-slate-400 mt-0.5 truncate">Alamat: {{ $lansia->pengguna->alamat ?? '-' }}</p>
-                                    </div>
-                                    <a href="{{ route('kader.families.show', $lansia->pengguna_id) }}" class="bg-white hover:bg-indigo-50 text-indigo-600 hover:text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-xl font-bold transition shrink-0">Kelola</a>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
-
-                <!-- Pasif Families -->
-                @if($prioritasKeluargaPasif->count() > 0)
-                    <div class="bg-slate-50/80 border border-slate-200 rounded-2xl p-4 space-y-3">
-                        <span class="text-[9px] font-extrabold text-slate-500 bg-white px-2 py-0.5 rounded-full border border-slate-200 uppercase tracking-wider">Keluarga Pasif Kegiatan (&gt;90 Hari Belum Hadir)</span>
-                        <div class="divide-y divide-slate-200/50">
-                            @foreach($prioritasKeluargaPasif as $pasif)
-                                <div class="py-2 flex items-center justify-between gap-4 first:pt-0 last:pb-0 text-xs">
-                                    <div class="min-w-0">
-                                        <h5 class="font-extrabold text-slate-800 truncate">Keluarga Bapak {{ $pasif->kepala_keluarga }}</h5>
-                                        <p class="text-[10px] text-slate-400 mt-0.5 truncate">No KK: {{ $pasif->username }} &bull; Kontak: {{ $pasif->nomor_telepon }}</p>
-                                    </div>
-                                    <a href="{{ route('kader.families.show', $pasif->id) }}" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3 py-1.5 rounded-xl font-bold transition shrink-0">Hubungi</a>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
-
-                @if($prioritasBumil->isEmpty() && $prioritasAnak->isEmpty() && $prioritasLansia->isEmpty() && $prioritasKeluargaPasif->isEmpty())
-                    <div class="text-center py-6 text-slate-400 text-xs bg-slate-50 border border-slate-100 rounded-2xl">
-                        Seluruh warga terpantau rutin melakukan kontrol kesehatan. Keadaan Posyandu Aman.
-                    </div>
-                @endif
-            </div>
-        </div>
-
-        <!-- Live Queue Monitor (COMMAND AREA) -->
+        <!-- 1. Live Queue Monitor (COMMAND AREA) -->
         <div id="queue-monitor-section" class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs relative">
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-2.5">
@@ -306,7 +209,7 @@
                         <div class="flex flex-col sm:flex-row justify-center gap-2.5 pt-2">
                             <button onclick="speakQueue('{{ $activeQueue->kode_antrean }}', '{{ addslashes($activeQueue->pengguna->kepala_keluarga ?? 'Umum') }}')" 
                                 class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition duration-150 shadow-xs flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 110 12.728M12 18a6 6 0 100-12 6 6 0 000 12z"></path></svg>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18a6 6 0 100-12 6 6 0 000 12z"></path></svg>
                                 Panggil Suara
                             </button>
                             
@@ -414,12 +317,63 @@
             </div>
         </div>
 
+        <!-- 2. Grafik Pelayanan (6 Bulan) (Wide Chart layout for 2/3 width) -->
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
+            <h3 class="text-base font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                Grafik Pelayanan & Tren Kunjungan (6 Bulan Terakhir)
+            </h3>
+            <div class="h-64 w-full">
+                <canvas id="visitationTrendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 3. Log Aktivitas Posyandu Command Center -->
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Log Aktivitas Posyandu Command Center
+                </h3>
+                <a href="{{ route('kader.audit-logs') }}" class="text-xs font-semibold text-emerald-600 hover:underline">Lihat Semua Log</a>
+            </div>
+
+            <div class="divide-y divide-slate-100">
+                @forelse($recentChecks as $check)
+                    <div class="py-3.5 first:pt-0 last:pb-0 flex items-start justify-between gap-4">
+                        <div class="space-y-0.5">
+                            <span class="text-[10px] text-slate-400 font-bold block">{{ $check->tanggal_periksa->format('d M Y') }}</span>
+                            <span class="font-bold text-slate-700 text-xs flex items-center gap-2">
+                                {{ $check->anggotaKeluarga->nama }}
+                                <span class="text-[9px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded-md">
+                                    {{ $check->anggotaKeluarga->kategori_formatted }}
+                                </span>
+                            </span>
+                            <p class="text-[11px] text-slate-500 line-clamp-1 leading-relaxed">
+                                BB {{ $check->berat_badan }} kg
+                                @if($check->tinggi_badan), TB {{ $check->tinggi_badan }} cm @endif
+                                @if($check->tekanan_darah), TD {{ $check->tekanan_darah }} @endif
+                                @if($check->keluhan). Keluhan: {{ $check->keluhan }} @endif
+                            </p>
+                        </div>
+                        <span class="text-[9px] font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full shrink-0 border border-slate-200">
+                            KK: {{ $check->anggotaKeluarga->pengguna->username }}
+                        </span>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-slate-400 text-xs">Belum ada aktivitas medis terekam.</div>
+                @endforelse
+            </div>
+        </div>
+
     </div>
 
-    
+    <!-- Right Column (1/3 width) -->
     <div class="space-y-6">
 
-        
+        <!-- 1. Verifikasi Anggota Baru -->
         <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
             <h3 class="text-base font-extrabold text-slate-800 mb-4 flex items-center justify-between">
                 <span class="flex items-center gap-2">
@@ -476,21 +430,105 @@
                 @endforelse
             </div>
         </div>
-        
-        <!-- Grafik Pelayanan -->
-        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
-            <h3 class="text-base font-extrabold text-slate-800 mb-4 flex items-center gap-2">
-                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-                Grafik Pelayanan (6 Bulan)
-            </h3>
-            <div class="h-64 w-full">
-                <canvas id="visitationTrendChart"></canvas>
+
+        <!-- 2. Smart Priority Panel -->
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs relative overflow-hidden">
+            <div class="absolute -top-12 -right-12 w-28 h-28 bg-rose-50 rounded-full blur-2xl"></div>
+            <div class="flex items-center gap-2.5 mb-6 relative z-10">
+                <div class="p-2 bg-rose-50 text-rose-500 rounded-xl">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-800">Smart Priority Panel</h3>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Warga terlambat jadwal kontrol</p>
+                </div>
+            </div>
+
+            <!-- List Priorities -->
+            <div class="space-y-4">
+                <!-- Ibu Hamil Overdue -->
+                @if($prioritasBumil->count() > 0)
+                    <div class="bg-rose-50/40 border border-rose-100 rounded-2xl p-4 space-y-3">
+                        <span class="text-[9px] font-extrabold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100 uppercase tracking-wider">Ibu Hamil Terlambat Kontrol (&gt;30 Hari)</span>
+                        <div class="divide-y divide-rose-100/50">
+                            @foreach($prioritasBumil as $bumil)
+                                <div class="py-2 flex items-center justify-between gap-4 first:pt-0 last:pb-0 text-xs">
+                                    <div class="min-w-0">
+                                        <h5 class="font-extrabold text-slate-800 truncate">{{ $bumil->nama }}</h5>
+                                        <p class="text-[10px] text-slate-400 mt-0.5 truncate">KK Bpk: {{ $bumil->pengguna->kepala_keluarga ?? '-' }}</p>
+                                    </div>
+                                    <a href="{{ route('kader.families.show', $bumil->pengguna_id) }}" class="bg-white hover:bg-rose-50 text-rose-600 hover:text-rose-700 border border-rose-200 px-3 py-1.5 rounded-xl font-bold transition shrink-0">Kelola</a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Anak/Bayi Overdue -->
+                @if($prioritasAnak->count() > 0)
+                    <div class="bg-amber-50/40 border border-amber-100 rounded-2xl p-4 space-y-3">
+                        <span class="text-[9px] font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100 uppercase tracking-wider">Bayi / Balita Lewat Jadwal Timbang</span>
+                        <div class="divide-y divide-amber-100/50">
+                            @foreach($prioritasAnak as $anak)
+                                <div class="py-2 flex items-center justify-between gap-4 first:pt-0 last:pb-0 text-xs">
+                                    <div class="min-w-0">
+                                        <h5 class="font-extrabold text-slate-800 truncate">{{ $anak->nama }}</h5>
+                                        <p class="text-[10px] text-slate-400 mt-0.5 truncate">Ortu: {{ $anak->pengguna->kepala_keluarga ?? '-' }}</p>
+                                    </div>
+                                    <a href="{{ route('kader.families.show', $anak->pengguna_id) }}" class="bg-white hover:bg-amber-50 text-amber-600 hover:text-amber-700 border border-amber-200 px-3 py-1.5 rounded-xl font-bold transition shrink-0">Kelola</a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Lansia Overdue -->
+                @if($prioritasLansia->count() > 0)
+                    <div class="bg-indigo-50/40 border border-indigo-100 rounded-2xl p-4 space-y-3">
+                        <span class="text-[9px] font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100 uppercase tracking-wider">Lansia Terlambat Kontrol (&gt;60 Hari)</span>
+                        <div class="divide-y divide-indigo-100/50">
+                            @foreach($prioritasLansia as $lansia)
+                                <div class="py-2 flex items-center justify-between gap-4 first:pt-0 last:pb-0 text-xs">
+                                    <div class="min-w-0">
+                                        <h5 class="font-extrabold text-slate-800 truncate">{{ $lansia->nama }}</h5>
+                                        <p class="text-[10px] text-slate-400 mt-0.5 truncate">Alamat: {{ $lansia->pengguna->alamat ?? '-' }}</p>
+                                    </div>
+                                    <a href="{{ route('kader.families.show', $lansia->pengguna_id) }}" class="bg-white hover:bg-indigo-50 text-indigo-600 hover:text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-xl font-bold transition shrink-0">Kelola</a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Pasif Families -->
+                @if($prioritasKeluargaPasif->count() > 0)
+                    <div class="bg-slate-50/80 border border-slate-200 rounded-2xl p-4 space-y-3">
+                        <span class="text-[9px] font-extrabold text-slate-500 bg-white px-2 py-0.5 rounded-full border border-slate-200 uppercase tracking-wider">Keluarga Pasif Kegiatan (&gt;90 Hari)</span>
+                        <div class="divide-y divide-slate-200/50">
+                            @foreach($prioritasKeluargaPasif as $pasif)
+                                <div class="py-2 flex items-center justify-between gap-4 first:pt-0 last:pb-0 text-xs">
+                                    <div class="min-w-0">
+                                        <h5 class="font-extrabold text-slate-800 truncate">Keluarga Bapak {{ $pasif->kepala_keluarga }}</h5>
+                                        <p class="text-[10px] text-slate-400 mt-0.5 truncate">KK: {{ $pasif->username }}</p>
+                                    </div>
+                                    <a href="{{ route('kader.families.show', $pasif->id) }}" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3 py-1.5 rounded-xl font-bold transition shrink-0">Hubungi</a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                @if($prioritasBumil->isEmpty() && $prioritasAnak->isEmpty() && $prioritasLansia->isEmpty() && $prioritasKeluargaPasif->isEmpty())
+                    <div class="text-center py-5 text-slate-400 text-xs bg-slate-50 border border-slate-100 rounded-2xl">
+                        Seluruh warga terpantau rutin kontrol kesehatan. Posyandu Aman.
+                    </div>
+                @endif
             </div>
         </div>
 
-        <!-- Jadwal Kegiatan Posyandu & Mini Calendar -->
+        <!-- 3. Jadwal Kegiatan Posyandu & Mini Calendar -->
         <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs space-y-6">
             <div class="flex items-center gap-2.5 border-b border-slate-100 pb-4">
                 <div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
@@ -515,11 +553,10 @@
                     <span class="calendar-day-cell text-slate-400">MI</span>
                 </div>
                 <div class="mini-calendar-grid text-[10px] font-bold text-slate-650">
-                    <!-- Basic calendar offset rendering -->
                     @php
                         $startOfMonth = now()->startOfMonth();
                         $daysInMonth = now()->daysInMonth;
-                        $dayOfWeek = ($startOfMonth->dayOfWeekIso - 1) % 7; // ISO day offset
+                        $dayOfWeek = ($startOfMonth->dayOfWeekIso - 1) % 7;
                     @endphp
                     
                     @for($i = 0; $i < $dayOfWeek; $i++)
@@ -572,85 +609,44 @@
             </div>
         </div>
 
+        <!-- 4. Papan Pengumuman -->
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18a6 6 0 100-12 6 6 0 000 12z"></path></svg>
+                    Papan Pengumuman
+                </h3>
+                <a href="{{ route('kader.announcements.index') }}" class="text-xs font-semibold text-emerald-600 hover:underline">Kelola</a>
+            </div>
+            
+            <div class="space-y-3.5">
+                @php
+                    $announcements = App\Models\Pengumuman::orderBy('tanggal_terbit', 'desc')->take(4)->get();
+                @endphp
+                @forelse($announcements as $ann)
+                    <div onclick="openKaderAnnouncementModal({{ $ann->id }})" class="p-3 bg-slate-50/70 hover:bg-emerald-50/40 rounded-2xl border border-slate-150 hover:border-emerald-300 transition duration-200 cursor-pointer group text-xs">
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span class="text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                                {{ $ann->tanggal_terbit ? $ann->tanggal_terbit->format('d M Y') : $ann->created_at->format('d M Y') }}
+                            </span>
+                            <span class="text-[9.5px] font-bold text-slate-400 group-hover:text-emerald-600">Detail &rarr;</span>
+                        </div>
+                        <h4 class="font-extrabold text-slate-800 leading-snug group-hover:text-emerald-700 transition">
+                            {{ $ann->judul }}
+                        </h4>
+                        <p class="text-[10.5px] text-slate-500 mt-1 leading-relaxed line-clamp-2">
+                            {{ $ann->konten }}
+                        </p>
+                    </div>
+                @empty
+                    <div class="text-center py-4 text-xs text-slate-400">Belum ada pengumuman.</div>
+                @endforelse
+            </div>
+        </div>
+
     </div>
 
 </div>
-
-<!-- Row 2: Recent Logs & Announcements -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-    <!-- Recent Logs (2/3 width) -->
-    <div class="lg:col-span-2 bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-2">
-                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                Log Aktivitas Posyandu Command Center
-            </h3>
-            <a href="{{ route('kader.audit-logs') }}" class="text-xs font-semibold text-emerald-600 hover:underline">Lihat Semua Log</a>
-        </div>
-
-        <div class="divide-y divide-slate-100">
-            @forelse($recentChecks as $check)
-                <div class="py-3.5 first:pt-0 last:pb-0 flex items-start justify-between gap-4">
-                    <div class="space-y-0.5">
-                        <span class="text-[10px] text-slate-400 font-bold block">{{ $check->tanggal_periksa->format('d M Y') }}</span>
-                        <span class="font-bold text-slate-700 text-xs flex items-center gap-2">
-                            {{ $check->anggotaKeluarga->nama }}
-                            <span class="text-[9px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded-md">
-                                {{ $check->anggotaKeluarga->kategori_formatted }}
-                            </span>
-                        </span>
-                        <p class="text-[11px] text-slate-500 line-clamp-1 leading-relaxed">
-                            BB {{ $check->berat_badan }} kg
-                            @if($check->tinggi_badan), TB {{ $check->tinggi_badan }} cm @endif
-                            @if($check->tekanan_darah), TD {{ $check->tekanan_darah }} @endif
-                            @if($check->keluhan). Keluhan: {{ $check->keluhan }} @endif
-                        </p>
-                    </div>
-                    <span class="text-[9px] font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full shrink-0 border border-slate-200">
-                        KK: {{ $check->anggotaKeluarga->pengguna->username }}
-                    </span>
-                </div>
-            @empty
-                <div class="text-center py-6 text-slate-400 text-xs">Belum ada aktivitas medis terekam.</div>
-            @endforelse
-        </div>
-    </div>
-
-    <!-- Announcements -->
-    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xs">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-2">
-                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18a6 6 0 100-12 6 6 0 000 12z"></path></svg>
-                Papan Pengumuman
-            </h3>
-            <a href="{{ route('kader.announcements.index') }}" class="text-xs font-semibold text-emerald-600 hover:underline">Kelola</a>
-        </div>
-        
-        <div class="space-y-3.5">
-            @php
-                $announcements = App\Models\Pengumuman::orderBy('tanggal_terbit', 'desc')->take(4)->get();
-            @endphp
-            @forelse($announcements as $ann)
-                <div onclick="openKaderAnnouncementModal({{ $ann->id }})" class="p-3 bg-slate-50/70 hover:bg-emerald-50/40 rounded-2xl border border-slate-150 hover:border-emerald-300 transition duration-200 cursor-pointer group text-xs">
-                    <div class="flex items-center justify-between gap-2 mb-1">
-                        <span class="text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
-                            {{ $ann->tanggal_terbit ? $ann->tanggal_terbit->format('d M Y') : $ann->created_at->format('d M Y') }}
-                        </span>
-                        <span class="text-[9.5px] font-bold text-slate-400 group-hover:text-emerald-600">Detail &rarr;</span>
-                    </div>
-                    <h4 class="font-extrabold text-slate-800 leading-snug group-hover:text-emerald-700 transition">
-                        {{ $ann->judul }}
-                    </h4>
-                    <p class="text-[10.5px] text-slate-500 mt-1 leading-relaxed line-clamp-2">
-                        {{ $ann->konten }}
-                    </p>
-                </div>
-            @empty
-                <div class="text-center py-4 text-xs text-slate-400">Belum ada pengumuman.</div>
-            @endforelse
-        </div>
-    </div>
 
 <!-- Kader Schedule Details Modal Layer -->
 <div id="kaderScheduleModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">

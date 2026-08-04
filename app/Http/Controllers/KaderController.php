@@ -752,18 +752,44 @@ class KaderController extends Controller
             'family_id' => 'nullable|exists:pengguna,id', // null means broadcast
             'title' => 'required|string|max:255',
             'message' => 'required|string',
+            'send_type' => 'required|in:now,scheduled',
+            'send_at' => 'nullable|required_if:send_type,scheduled|date',
         ]);
 
-        Notifikasi::create([
+        $sendAt = null;
+        if ($data['send_type'] === 'scheduled' && !empty($data['send_at'])) {
+            $sendAt = \Carbon\Carbon::parse($data['send_at']);
+        }
+
+        $notif = Notifikasi::create([
             'penerima_pengguna_id' => $data['family_id'],
             'judul' => $data['title'],
             'pesan' => $data['message'],
+            'waktu_kirim' => $sendAt,
         ]);
         
         $target = $data['family_id'] ? "Keluarga ID: {$data['family_id']}" : "Semua Keluarga (Broadcast)";
-        LogAudit::log('kirim_notifikasi', "Kader mengirim notifikasi ke {$target}: {$data['title']}");
+        $statusKet = $sendAt && $sendAt->isFuture() 
+            ? "dijadwalkan pada " . $sendAt->format('d M Y H:i') . " WIB" 
+            : "dikirim langsung";
 
-        return back()->with('success', 'Notifikasi berhasil dikirim.');
+        LogAudit::log('kirim_notifikasi', "Kader membuat notifikasi ({$statusKet}) ke {$target}: {$data['title']}");
+
+        $msgSuccess = $sendAt && $sendAt->isFuture() 
+            ? "Notifikasi berhasil dijadwalkan untuk dikirim pada " . $sendAt->format('d M Y H:i') . " WIB!" 
+            : "Notifikasi berhasil dikirim langsung!";
+
+        return back()->with('success', $msgSuccess);
+    }
+
+    public function deleteNotification($id)
+    {
+        $notif = Notifikasi::findOrFail($id);
+        $title = $notif->judul;
+        $notif->delete();
+
+        LogAudit::log('hapus_notifikasi', "Kader menghapus / membatalkan notifikasi: {$title}");
+        return back()->with('success', 'Notifikasi berhasil dihapus / dibatalkan.');
     }
 
     /**

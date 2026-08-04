@@ -46,10 +46,14 @@ class WargaController extends Controller
             ->take(5)
             ->get();
 
-        // Get notifications
+        // Get notifications (filter out future scheduled notifications)
         $notifications = Notifikasi::where(function ($q) use ($user) {
                 $q->where('penerima_pengguna_id', $user->id)
                   ->orWhereNull('penerima_pengguna_id'); // broadcast
+            })
+            ->where(function ($q) {
+                $q->whereNull('waktu_kirim')
+                  ->orWhere('waktu_kirim', '<=', Carbon::now());
             })
             ->orderBy('created_at', 'desc')
             ->take(10)

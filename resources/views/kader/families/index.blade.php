@@ -3,10 +3,32 @@
 @section('title', 'Kelola Data Keluarga')
 
 @section('content')
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-    <div>
-        <h2 class="text-xl font-bold text-slate-800 tracking-tight">Daftar Akun Keluarga (KK)</h2>
-        <p class="text-xs text-slate-500 font-medium mt-0.5">Total keluarga terdaftar di Posyandu DesaSehat</p>
+<!-- Hero Header Card (Ultra-Clean Responsive SaaS Banner) -->
+<div class="bg-white border border-slate-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs mb-5 sm:mb-6 relative overflow-hidden">
+    <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-50 rounded-full blur-3xl pointer-events-none"></div>
+    
+    <div class="flex items-center justify-between gap-3 relative z-10">
+        <!-- Icon & Titles -->
+        <div class="flex items-center gap-3 min-w-0">
+            <div class="p-2.5 sm:p-3 bg-emerald-500 text-white rounded-xl sm:rounded-2xl shadow-xs shrink-0">
+                <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            </div>
+            <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                    <h2 class="text-base sm:text-xl font-extrabold text-slate-800 tracking-tight truncate">Daftar Akun Keluarga (KK)</h2>
+                    <span class="hidden sm:inline-block text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded-full uppercase">Database KK</span>
+                </div>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 truncate sm:whitespace-normal">Kelola data kepala keluarga, registrasi akun warga, & pendaftaran anggota baru</p>
+            </div>
+        </div>
+
+        <!-- Quick Right Stat Badge -->
+        <div class="shrink-0">
+            <div class="bg-slate-50 border border-slate-150 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl text-right">
+                <span class="hidden sm:block text-[10px] text-slate-400 font-bold uppercase">Total Terdaftar</span>
+                <span class="text-xs sm:text-sm font-extrabold text-emerald-600 leading-none whitespace-nowrap">{{ $families->total() }} <span class="hidden sm:inline">Keluarga</span><span class="sm:hidden">KK</span></span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -39,15 +61,15 @@
 
         <!-- Table Card (Clean & Minimalist Layout, Multi-Device Responsive) -->
         <div class="bg-white border border-slate-100 rounded-3xl p-4 sm:p-6 shadow-xs overflow-hidden">
-            <div class="overflow-x-auto overflow-y-hidden">
-                <table class="w-full table-fixed min-w-[640px] md:min-w-0 text-left border-collapse align-middle text-xs">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse align-middle text-xs min-w-[620px]">
                     <thead>
                         <tr class="border-b border-slate-200/80 text-slate-500 font-semibold text-[11px] uppercase tracking-wider">
-                            <th class="py-3 px-4 w-[22%] min-w-[120px] whitespace-nowrap">No. KK</th>
-                            <th class="py-3 px-4 w-[24%]">Kepala Keluarga</th>
-                            <th class="py-3 px-4 w-[24%]">Alamat</th>
-                            <th class="py-3 px-4 w-[16%] whitespace-nowrap">Kontak</th>
-                            <th class="py-3 px-4 w-[14%] text-right whitespace-nowrap">Aksi</th>
+                            <th class="py-3 px-4 whitespace-nowrap">No. KK</th>
+                            <th class="py-3 px-4">Kepala Keluarga</th>
+                            <th class="py-3 px-4 w-full">Alamat</th>
+                            <th class="py-3 px-4 whitespace-nowrap">Kontak</th>
+                            <th class="py-3 px-4 text-right whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">

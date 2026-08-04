@@ -73,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
         // Notifications Management
         Route::get('/notifications', [KaderController::class, 'notifications'])->name('notifications.index');
         Route::post('/notifications', [KaderController::class, 'storeNotification'])->name('notifications.store');
+        Route::delete('/notifications/{id}', [KaderController::class, 'deleteNotification'])->name('notifications.delete');
         
         // Security Audit Logs
         Route::get('/audit-logs', [KaderController::class, 'auditLogs'])->name('audit-logs');

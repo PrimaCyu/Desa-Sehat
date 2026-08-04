@@ -3,10 +3,32 @@
 @section('title', 'Log Aktivitas Sistem')
 
 @section('content')
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-    <div>
-        <h2 class="text-xl font-bold text-slate-800">Log Audit Keamanan & Aktivitas</h2>
-        <p class="text-xs text-slate-400">Riwayat jejak audit seluruh transaksi yang dilakukan di platform DesaSehat</p>
+<!-- Hero Header Card (Ultra-Clean Responsive SaaS Banner) -->
+<div class="bg-white border border-slate-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs mb-5 sm:mb-6 relative overflow-hidden">
+    <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-50 rounded-full blur-3xl pointer-events-none"></div>
+    
+    <div class="flex items-center justify-between gap-3 relative z-10">
+        <!-- Icon & Titles -->
+        <div class="flex items-center gap-3 min-w-0">
+            <div class="p-2.5 sm:p-3 bg-emerald-500 text-white rounded-xl sm:rounded-2xl shadow-xs shrink-0">
+                <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
+            <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                    <h2 class="text-base sm:text-xl font-extrabold text-slate-800 tracking-tight truncate">Log Audit Keamanan & Aktivitas</h2>
+                    <span class="hidden sm:inline-block text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded-full uppercase">Audit System</span>
+                </div>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 truncate sm:whitespace-normal">Riwayat jejak audit seluruh transaksi & aktivitas yang dilakukan di platform DesaSehat</p>
+            </div>
+        </div>
+
+        <!-- Quick Right Stat Badge -->
+        <div class="shrink-0">
+            <div class="bg-slate-50 border border-slate-150 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl text-right">
+                <span class="hidden sm:block text-[10px] text-slate-400 font-bold uppercase">Total Aktivitas</span>
+                <span class="text-xs sm:text-sm font-extrabold text-emerald-600 leading-none whitespace-nowrap">{{ $logs->total() }} <span class="hidden sm:inline">Transaksi</span><span class="sm:hidden">Log</span></span>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -3,10 +3,32 @@
 @section('title', 'Kelola Pengumuman Posyandu')
 
 @section('content')
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-    <div>
-        <h2 class="text-xl font-bold text-slate-800 tracking-tight">Papan Pengumuman Posyandu</h2>
-        <p class="text-xs text-slate-500 font-medium mt-0.5">Publikasikan pengumuman penting bagi warga</p>
+<!-- Hero Header Card (Ultra-Clean Responsive SaaS Banner) -->
+<div class="bg-white border border-slate-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs mb-5 sm:mb-6 relative overflow-hidden">
+    <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-50 rounded-full blur-3xl pointer-events-none"></div>
+    
+    <div class="flex items-center justify-between gap-3 relative z-10">
+        <!-- Icon & Titles -->
+        <div class="flex items-center gap-3 min-w-0">
+            <div class="p-2.5 sm:p-3 bg-emerald-500 text-white rounded-xl sm:rounded-2xl shadow-xs shrink-0">
+                <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+            </div>
+            <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                    <h2 class="text-base sm:text-xl font-extrabold text-slate-800 tracking-tight truncate">Papan Pengumuman Posyandu</h2>
+                    <span class="hidden sm:inline-block text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded-full uppercase">Publik</span>
+                </div>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 truncate sm:whitespace-normal">Publikasikan berita resmi & informasi kegiatan bagi seluruh warga desa</p>
+            </div>
+        </div>
+
+        <!-- Quick Right Stat Badge -->
+        <div class="shrink-0">
+            <div class="bg-slate-50 border border-slate-150 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl text-right">
+                <span class="hidden sm:block text-[10px] text-slate-400 font-bold uppercase">Total Berita</span>
+                <span class="text-xs sm:text-sm font-extrabold text-emerald-600 leading-none whitespace-nowrap">{{ $announcements->total() }} <span class="hidden sm:inline">Pengumuman</span><span class="sm:hidden">Berita</span></span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -15,72 +37,74 @@
     <!-- List Announcements (2/3 width) -->
     <div class="lg:col-span-2 space-y-4">
         
-        <!-- Table Card (Clean & Minimalist Layout, Multi-Device Responsive) -->
-        <div class="bg-white border border-slate-100 rounded-3xl p-4 sm:p-6 shadow-xs overflow-hidden">
-            <div class="overflow-x-auto overflow-y-hidden">
-                <table class="w-full table-fixed min-w-[640px] md:min-w-0 text-left border-collapse align-middle text-xs">
-                    <thead>
-                        <tr class="border-b border-slate-200/80 text-slate-500 font-semibold text-[11px] uppercase tracking-wider">
-                            <th class="py-3 px-4 w-[18%] min-w-[110px] whitespace-nowrap">Tanggal Terbit</th>
-                            <th class="py-3 px-4 w-[42%]">Judul & Ringkasan</th>
-                            <th class="py-3 px-4 w-[20%] whitespace-nowrap">Pembuat</th>
-                            <th class="py-3 px-4 w-[20%] text-right whitespace-nowrap">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        @forelse($announcements as $a)
-                            <tr class="hover:bg-slate-50/60 transition-colors align-middle">
-                                <!-- Tanggal Terbit -->
-                                <td class="py-3.5 px-4 font-bold text-slate-600 align-middle whitespace-nowrap">
-                                    <div class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                        <span>{{ $a->tanggal_terbit ? $a->tanggal_terbit->format('d M Y') : $a->created_at->format('d M Y') }}</span>
-                                    </div>
-                                </td>
-
-                                <!-- Judul & Ringkasan (Ringkas 1-2 baris tanpa box berlebihan) -->
-                                <td class="py-3.5 px-4 align-middle">
-                                    <span class="font-semibold text-slate-800 text-xs block truncate" title="{{ $a->judul }}">{{ $a->judul }}</span>
-                                    <span class="text-[11px] text-slate-400 block mt-0.5 truncate" title="{{ Str::limit($a->konten, 150) }}">{{ Str::limit($a->konten, 90) }}</span>
-                                </td>
-
-                                <!-- Pembuat -->
-                                <td class="py-3.5 px-4 text-slate-700 font-semibold align-middle whitespace-nowrap">
-                                    <span class="inline-flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/70 text-[11px]">
-                                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                                        {{ $a->pembuat ? $a->pembuat->name : 'Sistem' }}
-                                    </span>
-                                </td>
-
-                                <!-- Aksi (Detail & Hapus) -->
-                                <td class="py-3.5 px-4 text-right align-middle whitespace-nowrap">
-                                    <div class="inline-flex items-center gap-1.5 justify-end">
-                                        <button type="button" onclick="openAnnouncementDetailModal({{ $a->id }})" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-2.5 py-1.5 rounded-lg transition cursor-pointer text-xs border border-slate-200/70 inline-flex items-center gap-1">
-                                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                            Detail
-                                        </button>
-                                        <form action="{{ route('kader.announcements.delete', $a->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')" class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 hover:text-rose-700 font-semibold px-2.5 py-1.5 rounded-lg transition cursor-pointer text-xs">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="py-8 text-center text-slate-400 text-xs">Belum ada pengumuman yang diterbitkan.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+        <!-- List Announcement Cards (Modern Feed Layout, Zero Overlaps) -->
+        <div class="bg-white border border-slate-100 rounded-3xl p-4 sm:p-6 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
+                <h3 class="text-xs sm:text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    Daftar Pengumuman Aktif
+                </h3>
+                <span class="text-[10px] sm:text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 sm:px-2.5 rounded-full shrink-0">
+                    Total: {{ $announcements->total() }}
+                </span>
             </div>
 
-            <div class="mt-6 pt-4 border-t border-slate-100">
-                {{ $announcements->links() }}
+            <div class="space-y-3">
+                @forelse($announcements as $a)
+                    <div class="p-3.5 sm:p-4 bg-slate-50/70 hover:bg-emerald-50/40 rounded-2xl border border-slate-150 hover:border-emerald-200 transition-all duration-200 space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between sm:gap-4 group">
+                        
+                        <div class="min-w-0 flex-1 space-y-1">
+                            <div class="flex items-center gap-1.5 flex-wrap text-[10px] sm:text-[10.5px]">
+                                <span class="font-bold text-emerald-700 bg-emerald-50 border border-emerald-100/80 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    {{ $a->tanggal_terbit ? $a->tanggal_terbit->format('d M Y') : $a->created_at->format('d M Y') }}
+                                </span>
+                                <span class="font-semibold text-slate-400 flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    Oleh: {{ $a->pembuat ? $a->pembuat->name : 'Sistem' }}
+                                </span>
+                            </div>
+
+                            <h4 class="font-extrabold text-slate-800 text-xs sm:text-sm leading-snug group-hover:text-emerald-700 transition">
+                                {{ $a->judul }}
+                            </h4>
+
+                            <p class="text-[11px] sm:text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                                {{ Str::limit($a->konten, 130) }}
+                            </p>
+                        </div>
+
+                        
+                        <div class="flex items-center justify-end gap-2 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-slate-200/60 shrink-0">
+                            <button type="button" onclick="openAnnouncementDetailModal({{ $a->id }})" class="bg-white hover:bg-slate-100 text-slate-700 font-bold px-3 py-1.5 rounded-xl border border-slate-200 text-xs shadow-2xs transition cursor-pointer flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                Detail
+                            </button>
+                            <form action="{{ route('kader.announcements.delete', $a->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengumuman ini?')" class="inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-3 py-1.5 rounded-xl border border-rose-200 text-xs transition cursor-pointer">
+                                    Hapus
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-10 border border-dashed border-slate-200 rounded-2xl">
+                        <div class="inline-flex bg-slate-100 text-slate-400 p-3 rounded-full mb-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                        </div>
+                        <h5 class="font-bold text-slate-600 text-xs">Belum ada pengumuman yang diterbitkan</h5>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Gunakan formulir di sebelah kanan untuk menambahkan pengumuman baru.</p>
+                    </div>
+                @endforelse
             </div>
+
+            @if($announcements->hasPages())
+                <div class="mt-4 pt-4 border-t border-slate-100">
+                    {{ $announcements->links() }}
+                </div>
+            @endif
         </div>
 
     </div>
